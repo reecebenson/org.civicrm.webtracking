@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="iso-8859-1" ?>
+
+<table>
+  <base>CRM/WebTracking</base>
+  <class>WebTracking</class>
+  <name>civicrm_webtracking</name>
+  <comment>This table will hold web tracking parameters for various pages.</comment>
+  <add>4.6</add>
+  <log>true</log>
+  <field>
+    <name>id</name>
+    <title>WebTracking ID</title>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>WebTracking ID</comment>
+    <add>4.6</add>
+  </field>
+  <primaryKey>
+    <name>id</name>
+    <autoincrement>true</autoincrement>
+  </primaryKey>
+  <field>
+    <name>enable_tracking</name>
+    <title>Enable Tracking</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>User chooses to enable web tracking or not?</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>tracking_id</name>
+    <title>UA ID</title>
+    <type>varchar</type>
+    <length>64</length>
+    <comment>Unique UAID provided by google analytics.</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>page_id</name>
+    <title>Page ID</title>
+    <type>int unsigned</type>
+    <required>true</required>
+    <comment>Holds the id to the CiviEvent/CiviContribution/CiviDonation.</comment>
+    <add>4.6</add>
+  </field>
+   <field>
+    <name>page_category</name>
+    <title>Page Category</title>
+    <type>varchar</type>
+    <length>64</length>
+    <required>true</required>
+    <comment>Whether the Page this row refers to is a CiviEvent/CiviContribution/CiviDonation Page.</comment>
+    <add>4.6</add>
+  </field>
+</table>
