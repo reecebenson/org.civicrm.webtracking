@@ -33,15 +33,24 @@
 
   <table class="form-layout-compressed">         
     <!--##TODO: Create a new class for the enable tracking checkbox-->
-    <tr class="crm-event-manage-eventinfo-form-block-is_active">
+    <tr class="crm-event-manage-webtracking-form-block-enable_tracking" id="enable-tracking">
       <td>&nbsp;</td>
       <td>{$form.enable_tracking.html} {$form.enable_tracking.label}</td>
     </tr>
-    <tr class="crm-event-manage-eventinfo-form-block-title" id="tracking-params">
-      <td>{$form.tracking_id.label}</td>
-      <td>{$form.tracking_id.html} </br></td>
-    </tr>
-  </table>
+  </table>  
+
+  <div id="tracking-params">  
+    <table class="form-layout-compressed">  
+      <tr class="crm-event-manage-webtracking-form-block-tracking_params">
+        <td>{$form.tracking_id.label}</td>
+        <td>{$form.tracking_id.html} </br></td>
+      </tr>
+      <tr>
+        <td>Hi</td>
+        <td>Vishal</td>  
+      </tr>  
+    </table>
+  </div>
    
     <!--## Custom Event Tracking.. registration link was clicked how many times etc.-->
     <!--
@@ -80,5 +89,13 @@
 
 {include file="CRM/common/showHide.tpl"}
 
-
+{literal}
+<script type="text/javascript">
+cj(document).ready(function(){
+      cj('#enable_tracking').change(function() {
+        cj('.crm-event-manage-webtracking-form-block-tracking_params').toggle();
+      });
+});    
+</script>
+{/literal}
 
