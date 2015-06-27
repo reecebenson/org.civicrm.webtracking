@@ -232,3 +232,35 @@ function civiwebtracking_civicrm_buildForm($formName, &$form) {
     }
   }    
 }
+
+function civiwebtracking_civicrm_navigationMenu(&$params) {
+ 
+  // Check that our item doesn't already exist
+  $menu_item_search = array('url' => 'civicrm/report/webtracking');
+  $menu_items = array();
+  CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
+ 
+  if ( ! empty($menu_items) ) { 
+    return;
+  }
+ 
+  $navId = CRM_Core_DAO::singleValueQuery("SELECT max(id) FROM civicrm_navigation");
+  if (is_integer($navId)) {
+    $navId++;
+  }
+  // Find the Report menu
+  $reportID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Reports', 'id', 'name');
+      $params[$reportID]['child'][$navId] = array (
+        'attributes' => array (
+          'label' => ts('Web Tracking Report',array('domain' => 'org.civicrm.module.civiwebtracking')),
+          'name' => 'Web Tracking Reaport',
+          'url' => 'civicrm/report/webtracking',
+          'permission' => 'access CiviReport,access CiviEvent',
+          'operator' => 'OR',
+          'separator' => 1,
+          'parentID' => $reportID,
+          'navID' => $navId,
+          'active' => 1
+    )   
+  );  
+}

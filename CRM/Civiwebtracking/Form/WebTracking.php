@@ -63,6 +63,13 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $params['page_category']="civicrm_event";
     $defaults = array();
     CRM_Civiwebtracking_BAO_WebTracking::retrieve($params,$defaults);
+
+    $this->_showHide = new CRM_Core_ShowHideBlocks();
+    if (!$defaults['enable_tracking']) {
+      $this->_showHide->addHide('tracking-params');
+    }  
+    $this->_showHide->addToTemplate();
+
     return $defaults;
   }
 

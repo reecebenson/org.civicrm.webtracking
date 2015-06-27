@@ -23,28 +23,26 @@
  | see the CiviCRM license FAQ at http://civicrm.org/licensing        |
  +--------------------------------------------------------------------+
 *}
-{* Step 1 of New Event Wizard, and Edit Event Info form. *}
 
 <div class="crm-block crm-form-block crm-event-manage-eventinfo-form-block">
   <!-- ##These buttons need to be present -->
   <div class="crm-submit-buttons">
   {include file="CRM/common/formButtons.tpl" location="top"}
   </div>
-  <table class="form-layout-compressed">
-           
+
+
+  <table class="form-layout-compressed">         
     <!--##TODO: Create a new class for the enable tracking checkbox-->
     <tr class="crm-event-manage-eventinfo-form-block-is_active">
       <td>&nbsp;</td>
       <td>{$form.enable_tracking.html} {$form.enable_tracking.label}</td>
     </tr>
-
-    <tr class="crm-event-manage-eventinfo-form-block-title">
-     
+    <tr class="crm-event-manage-eventinfo-form-block-title" id="tracking-params">
       <td>{$form.tracking_id.label}</td>
       <td>{$form.tracking_id.html} </br></td>
     </tr>
-    
-    
+  </table>
+   
     <!--## Custom Event Tracking.. registration link was clicked how many times etc.-->
     <!--
     <tr class="crm-event-manage-eventinfo-form-block-is_active">
@@ -79,6 +77,8 @@
      {include file="CRM/common/formButtons.tpl" location="bottom"}
   </div>
 </div>
+
+{include file="CRM/common/showHide.tpl"}
 
 
 
