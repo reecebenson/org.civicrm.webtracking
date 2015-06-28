@@ -27,13 +27,13 @@ limitations under the License.
 
 .DateRangeSelector {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   margin: 0 0 -1em -1em;
 }
 
 .DateRangeSelector-item {
   margin: 0 0 1em 1em;
-  flex: 1 0 calc(100% - 1em);
+  flex: 1 0 calc((100% - 4em)/2);
 }
 
 .DateRangeSelector-item > label {
