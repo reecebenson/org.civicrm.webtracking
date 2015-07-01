@@ -24,34 +24,35 @@
  +--------------------------------------------------------------------+
 *}
 
-<div class="crm-block crm-form-block crm-event-manage-eventinfo-form-block">
-  <!-- ##These buttons need to be present -->
+<div class="crm-block crm-form-block crm-event-manage-webtracking-form-block">
+  
   <div class="crm-submit-buttons">
   {include file="CRM/common/formButtons.tpl" location="top"}
   </div>
 
-
-  <table class="form-layout-compressed">         
-    <!--##TODO: Create a new class for the enable tracking checkbox-->
+  <table class="form-table-webtracking" border="8px">         
+    <!--##TODO: Fix the names of the  classes in this file-->
     <tr class="crm-event-manage-webtracking-form-block-enable_tracking" id="enable-tracking">
       <td>&nbsp;</td>
       <td>{$form.enable_tracking.html} {$form.enable_tracking.label}</td>
     </tr>
+
+    <tbody id="tracking-params">
+      <tr class="crm-event-manage-webtracking-form-block-tracking_params">
+          <td>{$form.tracking_id.label}</td>
+          <td>{$form.tracking_id.html} </br></td>
+      </tr>
+      <tr class="crm-event-manage-eventinfo-form-block-is_active">
+        <td>&nbsp;</td>
+        <td>{$form.primary_page_experiment.html} {$form.primary_page_experiment.label}</td>
+      </tr> 
+      <tr class="crm-event-manage-eventinfo-form-block-title" id="experiment-id">
+        <td>{$form.experiment_id.label}</td>
+        <td>{$form.experiment_id.html} </br></td>
+      </tr>
+    </tbody>
   </table>  
 
-  <div id="tracking-params">  
-    <table class="form-layout-compressed">  
-      <tr class="crm-event-manage-webtracking-form-block-tracking_params">
-        <td>{$form.tracking_id.label}</td>
-        <td>{$form.tracking_id.html} </br></td>
-      </tr>
-      <tr>
-        <td>Hi</td>
-        <td>Vishal</td>  
-      </tr>  
-    </table>
-  </div>
-   
     <!--## Custom Event Tracking.. registration link was clicked how many times etc.-->
     <!--
     <tr class="crm-event-manage-eventinfo-form-block-is_active">
@@ -66,21 +67,11 @@
       <td>{$form.ecommerce_tracking.html} {$form.ecommerce_tracking.label}</td>
     </tr>
     -->
-    <!--## Primary Page Of Experiment?-->
-    <!--
-    <tr class="crm-event-manage-eventinfo-form-block-is_active">
-      <td>&nbsp;</td>
-      <td>{$form.primary_page_experiment.html} {$form.primary_page_experiment.label}</td>
-    </tr>
-    -->
+    <!--## Primary Page Of Experiment?-->  
+   
+    
     <!--## Experiment ID-->
-    <!--
-    <tr class="crm-event-manage-eventinfo-form-block-title">
-      <td>{$form.experiment_id.label}</td>
-      <td>{$form.experiment_id.html} </br></td>
-    </tr>
-    -->
-  </table>
+    
   <!-- ##These buttons need to be present -->
   <div class="crm-submit-buttons">
      {include file="CRM/common/formButtons.tpl" location="bottom"}
@@ -93,7 +84,7 @@
 <script type="text/javascript">
 cj(document).ready(function(){
       cj('#enable_tracking').change(function() {
-        cj('.crm-event-manage-webtracking-form-block-tracking_params').toggle();
+        cj('#tracking-params').toggle();
       });
 });    
 </script>

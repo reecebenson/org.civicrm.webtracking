@@ -46,6 +46,7 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    * @return void
    */
   public function preProcess() {
+    CRM_Core_Resources::singleton()->addStyleFile('org.civicrm.module.civiwebtracking', 'css/webTrackingForm.css');
     parent::preProcess();   // ##why is this function called or rather what does this do?
   }
 
@@ -67,6 +68,9 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $this->_showHide = new CRM_Core_ShowHideBlocks();
     if (!$defaults['enable_tracking']) {
       $this->_showHide->addHide('tracking-params');
+    }  
+    else {
+      $this->_showHide->addHide('experiment-id');
     }  
     $this->_showHide->addToTemplate();
 
@@ -92,13 +96,14 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $this->addElement('checkbox', 'custom_event_tracking', ts('Enable CustomEventTracking?'));
 
      //## E-Commerce Tracking 
-    $this->addElement('checkbox', 'ecommerce_tracking', ts('Enable E-Commerce Tracking?'));
+    $this->addElement('checkbox', 'ecommerce_tracking', ts('Enable E-Commerce Tracking?'));*/
 
      //## Is this the primary page of the experiment 
-    $this->addElement('checkbox', 'primary_page_experiment', ts('Is it the primary page of the experiment?'));
+    $this->addElement('checkbox', 'primary_page_experiment', ts('Is it the primary page of the experiment?'), NULL,
+      array('onclick' => "return showHideByValue('primary_page_experiment','','experiment-id','table-row','radio',false);"));
 
      //## Experiment ID
-    $this->add('text', 'experiment_id', ts('Experiment ID'));*/
+    $this->add('text', 'experiment_id', ts('Experiment ID'));
       
    // $form->registerRule('checktracking', 'callback', 'checkTracking');
     //$form->addRule('tracking_id', 'Tracking ID is invalid', 'checktracking');
