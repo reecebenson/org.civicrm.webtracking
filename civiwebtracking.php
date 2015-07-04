@@ -161,12 +161,9 @@ function civiwebtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
       );
     }
  
- //Insert this tab into position 4  
-$tabs = array_merge(
-      array_slice($tabs, 0, 4),
-      $tab,
-      array_slice($tabs, 4)
-    );
+  //Insert this tab in the end  
+  $tabs = array_merge($tabs,$tab);
+
   }
 }
 
