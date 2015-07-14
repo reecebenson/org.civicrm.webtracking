@@ -81,35 +81,71 @@ class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
    */
   static $_log = true;
   /**
-   * WebTracking ID
+   * Serial No.
    *
    * @var int unsigned
    */
   public $id;
   /**
-   * User chooses to enable web tracking or not?
-   *
-   * @var boolean
-   */
-  public $enable_tracking;
-  /**
-   * Unique UAID provided by google analytics.
-   *
-   * @var string
-   */
-  public $tracking_id;
-  /**
-   * Holds the id to the CiviEvent/CiviContribution/CiviDonation.
+   * Holds the id of the Event/Contribution page
    *
    * @var int unsigned
    */
   public $page_id;
   /**
-   * Whether the Page this row refers to is a CiviEvent/CiviContribution/CiviDonation Page.
+   * Denotes whether the page is an event page or a contribution page
    *
    * @var string
    */
   public $page_category;
+  /**
+   * Denotes whether webtracking is enabled or not
+   *
+   * @var boolean
+   */
+  public $enable_tracking;
+  /**
+   * Unique UAID provided by google analytics
+   *
+   * @var string
+   */
+  public $tracking_id;
+   /**
+   * Track the event of user clicking on the register button
+   *
+   * @var boolean
+   */
+  public $track_register;
+   /**
+   * Track the event of user changing the default price option
+   *
+   * @var boolean
+   */
+  public $track_price_change;
+   /**
+   * Track the event of user clicking on the confirm register button
+   *
+   * @var boolean
+   */
+  public $track_confirm_register;
+   /**
+   * Denotes whether ecommerce tracking is enabled or not
+   *
+   * @var boolean
+   */
+  public $track_ecommerce;
+   /**
+   * Denotes whether the page is the primary page of a google analytics experiment
+   *
+   * @var boolean
+   */
+  public $is_expreriment;
+   /**
+   * Unique experiment ID provided by google analytics
+   *
+   * @var string
+   */
+  public $experiment_id;
   /**
    * class constructor
    *
@@ -132,37 +168,75 @@ class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
         'id' => array(
           'name' => 'id',
           'type' => CRM_Utils_Type::T_INT,
-          'title' => ts('WebTracking ID') ,
-          'description' => 'WebTracking ID',
+          'title' => ts('Serial No.') ,
+          'description' => 'Serial No.',
           'required' => true,
-        ) ,
-        'enable_tracking' => array(
-          'name' => 'enable_tracking',
-          'type' => CRM_Utils_Type::T_BOOLEAN,
-          'title' => ts('Enable Tracking') ,
-          'description' => 'User chooses to enable web tracking or not?',
-        ) ,
-        'tracking_id' => array(
-          'name' => 'tracking_id',
-          'type' => CRM_Utils_Type::T_STRING,
-          'title' => ts('UA ID') ,
-          'description' => 'Unique UAID provided by google analytics.',
-          'maxlength' => 64,
-          'size' => CRM_Utils_Type::BIG,
-        ) ,
+        ) ,   
         'page_id' => array(
           'name' => 'page_id',
           'type' => CRM_Utils_Type::T_INT,
           'title' => ts('Page ID') ,
-          'description' => 'Holds the id to the CiviEvent/CiviContribution/CiviDonation.',
+          'description' => 'Holds the id of the Event/Contribution page',
           'required' => true,
         ) ,
         'page_category' => array(
           'name' => 'page_category',
           'type' => CRM_Utils_Type::T_STRING,
           'title' => ts('Page Category') ,
-          'description' => 'Whether the Page this row refers to is a CiviEvent/CiviContribution/CiviDonation Page.',
+          'description' => 'Denotes whether the page is an event page or a contribution page',
           'required' => true,
+          'maxlength' => 64,
+          'size' => CRM_Utils_Type::BIG,
+        ) ,
+        'enable_tracking' => array(
+          'name' => 'enable_tracking',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Enable Tracking') ,
+          'description' => 'Denotes whether webtracking is enabled or not',
+        ) ,
+        'tracking_id' => array(
+          'name' => 'tracking_id',
+          'type' => CRM_Utils_Type::T_STRING,
+          'title' => ts('Tracking ID') ,
+          'description' => 'Unique UAID provided by google analytics',
+          'maxlength' => 64,
+          'size' => CRM_Utils_Type::BIG,
+        ) ,
+        'track_register' => array(
+          'name' => 'track_register',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Register') ,
+          'description' => 'Track the event of user clicking on the register button',
+        ) ,
+        'track_price_change' => array(
+          'name' => 'track_price_change',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Price Change') ,
+          'description' => 'Track the event of user changing the default price option',
+        ) ,
+        'track_confirm_register' => array(
+          'name' => 'track_confirm_register',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Confirm Register') ,
+          'description' => 'Track the event of user clicking on the confirm register button',
+        ) ,
+        'track_ecommerce' => array(
+          'name' => 'track_ecommerce',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Ecommerce') ,
+          'description' => 'Denotes whether ecommerce tracking is enabled or not',
+        ) ,
+        'is_expreriment' => array(
+          'name' => 'is_expreriment',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Is Experiment') ,
+          'description' => 'Denotes whether the page is the primary page of a google analytics experiment',
+        ) ,
+        'experiment_id' => array(
+          'name' => 'experiment_id',
+          'type' => CRM_Utils_Type::T_STRING,
+          'title' => ts('Experiment ID') ,
+          'description' => 'Unique experiment ID provided by google analytics',
           'maxlength' => 64,
           'size' => CRM_Utils_Type::BIG,
         ) ,
@@ -181,10 +255,16 @@ class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
     if (!(self::$_fieldKeys)) {
       self::$_fieldKeys = array(
         'id' => 'id',
-        'enable_tracking' => 'enable_tracking',
-        'tracking_id' => 'tracking_id',
         'page_id' => 'page_id',
         'page_category' => 'page_category',
+        'enable_tracking' => 'enable_tracking',
+        'tracking_id' => 'tracking_id',
+        'track_register' => 'track_register',
+        'track_price_change' => 'track_price_change',
+        'track_confirm_register' => 'track_confirm_register',
+        'track_ecommerce' => 'track_ecommerce',
+        'is_expreriment' => 'is_expreriment',
+        'experiment_id' => 'experiment_id',
       );
     }
     return self::$_fieldKeys;
