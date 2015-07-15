@@ -26,17 +26,7 @@
  */
 
 /**
- *
- *
- * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2015
- * $Id$
- *
- */
-
-/**
  * This class generates form components for processing Event Web Tracking
- *
  */
 class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
 
@@ -47,32 +37,36 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    */
   public function preProcess() {
     CRM_Core_Resources::singleton()->addStyleFile('org.civicrm.module.civiwebtracking', 'css/webTrackingForm.css');
-    parent::preProcess();   // ##why is this function called or rather what does this do?
+    parent::preProcess();
   }
 
   /**
-   * Set default values for the form. For edit/view mode
-   * the default values are retrieved from the database
-   *
+   * Set default values for the form
    *
    * @return void
    */
   public function setDefaultValues() {
-   
-    //## Will have to set the even_id in params 
+    
     $params['page_id']=$this->_id;
     $params['page_category']="civicrm_event";
     $defaults = array();
     CRM_Civiwebtracking_BAO_WebTracking::retrieve($params,$defaults);
 
-    if(empty($defaults))
-      return $defaults;
-
     $this->_showHide = new CRM_Core_ShowHideBlocks();
-    if (!$defaults['enable_tracking']) {
-      $this->_showHide->addHide('tracking-params');
+
+    if(empty($defaults)) {
+      // When the values have not been set previosuly, hide the tracking params and the experiment id text field
+      $this->_showHide->addHide('webtracking-params');
+      $this->_showHide->addHide('experiment-id');
+    }
+    else if (!$defaults['enable_tracking']) {
+      // When webtracking is disabled, hide the tracking params
+      $this->_showHide->addHide('webtracking-params');
+      if(!$defaults['is_experiment'])
+        $this->_showHide->addHide('experiment-id');  
     }  
-    else {
+    else if(!$defaults['is_experiment']){
+      // When webtracking is enabled but page is not the primary page of an experiment, hide the experiment id
       $this->_showHide->addHide('experiment-id');
     }  
     $this->_showHide->addToTemplate();
@@ -87,29 +81,33 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    */
   public function buildQuickForm() {
 
-    $this->applyFilter('__ALL__', 'trim'); // ## what does this function do?
+    // TODO:: Is this required?
+    $this->applyFilter('__ALL__', 'trim');
 
-    //## Create a checkbox to ask whether or not to enable web tracking
-    $this->addElement('checkbox', 'enable_tracking', ts('Enable WebTracking?'));
+    // Checkbox to ask whether or not to enable web tracking
+    $this->addElement('checkbox', 'enable_tracking', ts('Enable Web Tracking'));
 
-    //## UAID
+    // Text field to input the tracking id
      $this->add('text', 'tracking_id', ts('Tracking ID'));
 
-    /*//## Custom Event Tracking 
-    $this->addElement('checkbox', 'custom_event_tracking', ts('Enable CustomEventTracking?'));
+    // Checkbox to ask whether or not to track when the user clicks on register
+    $this->addElement('checkbox', 'track_register', ts('Track Click On Register'));
 
-     //## E-Commerce Tracking 
-    $this->addElement('checkbox', 'ecommerce_tracking', ts('Enable E-Commerce Tracking?'));*/
+    // Checkbox to ask whether or not to track when the user changes default price option
+    $this->addElement('checkbox', 'track_price_change', ts('Track Price Change'));
 
-     //## Is this the primary page of the experiment 
-    $this->addElement('checkbox', 'primary_page_experiment', ts('Is it the primary page of the experiment?'), NULL,
-      array('onclick' => "return showHideByValue('primary_page_experiment','','experiment-id','table-row','radio',false);"));
+    // Checkbox to ask whether or not to track when the user clicks on confirm register
+    $this->addElement('checkbox', 'track_confirm_register', ts('Track Click On Confirm Register'));
 
-     //## Experiment ID
+    // Checkbox to ask whether or not to enable ecommerce tracking
+    $this->addElement('checkbox', 'track_ecommerce', ts('Enable Ecommerce Tracking'));
+
+    // Checkbox to ask whether the page is the primary page of the experiment 
+    $this->addElement('checkbox', 'is_experiment', ts('Primary Page Of Experiment'), NULL,
+      array('onclick' => "return showHideByValue('is_experiment','','experiment-id','table-row','radio',false);"));
+
+    // Text field to input the experiment id
     $this->add('text', 'experiment_id', ts('Experiment ID'));
-      
-   // $form->registerRule('checktracking', 'callback', 'checkTracking');
-    //$form->addRule('tracking_id', 'Tracking ID is invalid', 'checktracking');
 
     $this->addFormRule(array('CRM_Civiwebtracking_Form_WebTracking', 'formRule'));
 
@@ -124,15 +122,14 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    * @return array
    *   list of errors to be posted back to the form
    */
-
-  //## can i add the checks that I need to perform here?
   public static function formRule($values) {
     $errors = array();
 
     if(isset($values['enable_tracking']) && $values['enable_tracking'] == 1)
     {
+      // Checking that UAID provided by the customer has the string 'UA-' as its prefix
       $pos = strpos($values['tracking_id'],'UA-'); 
-      if($pos===false || $pos!==0) $errors['tracking_id'] = ts('You have selected to enable tracking, please provide a valid tracking id');
+      if($pos===false || $pos!==0) $errors['tracking_id'] = ts('You have selected to enable web tracking, please provide a valid tracking id');
     }
     
     return $errors;
@@ -141,12 +138,11 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
   /**
    * Process the form submission.
    *
-   *
    * @return void
    */
   public function postProcess() {
 
-    //## similar call is also made in Location.tpl What does this call do exactly?
+    // TODO:: is this required?
     $params = $this->controller->exportValues($this->_name);
 
     $existParams['page_id'] = $this->_id;
@@ -154,21 +150,28 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $existingEnrty = array();
     
     CRM_Civiwebtracking_BAO_WebTracking::retrieve($existParams,$existingEnrty);
+
+    // Setting up the params array with the values obtained from the form 
     if(!empty($existingEnrty))
     {
        $params['id'] = $existingEnrty['id']; 
     }
-
-    $params['enable_tracking'] = CRM_Utils_Array::value('enable_tracking', $params, FALSE);
-    $params['tracking_id'] = CRM_Utils_Array::value('tracking_id', $params, FALSE);
     $params['page_id'] = $this->_id;
     $params['page_category']="civicrm_event";
+    $params['enable_tracking'] = CRM_Utils_Array::value('enable_tracking', $params, FALSE);
+    $params['tracking_id'] = CRM_Utils_Array::value('tracking_id', $params, NULL);
+    $params['track_register'] = CRM_Utils_Array::value('track_register', $params, FALSE);
+    $params['track_price_change'] = CRM_Utils_Array::value('track_price_change', $params, FALSE);
+    $params['track_confirm_register'] = CRM_Utils_Array::value('track_confirm_register', $params, FALSE);
+    $params['track_ecommerce'] = CRM_Utils_Array::value('track_ecommerce', $params, FALSE);
+    $params['is_experiment'] = CRM_Utils_Array::value('is_experiment', $params, FALSE);
+    $params['experiment_id'] = CRM_Utils_Array::value('experiment_id', $params, NULL);
 
-    //## this call creates the event and adds the input from the form into the DB. even called in Location
+    // Updating the database with the new entry
     $event = CRM_Civiwebtracking_BAO_WebTracking::add($params);
 
     if ($this->_action & CRM_Core_Action::ADD) {
-      $url = 'civicrm/event/manage/location';
+      $url = 'civicrm/event/manage/webtracking';
       $urlParams = "action=update&reset=1&id={$event->id}";
       // special case for 'Save and Done' consistency.
       if ($this->controller->getButtonName('submit') == '_qf_EventInfo_upload_done') {

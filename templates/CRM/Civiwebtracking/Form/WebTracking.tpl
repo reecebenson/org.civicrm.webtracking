@@ -37,45 +37,42 @@
       <td>{$form.enable_tracking.html} {$form.enable_tracking.label}</td>
     </tr>
 
-    <tbody id="tracking-params">
-      <tr class="crm-event-manage-webtracking-form-block-tracking_params">
+    <tbody id="webtracking-params">
+      <tr class="crm-event-manage-webtracking-form-block-tracking_id">
           <td>{$form.tracking_id.label}</td>
           <td>{$form.tracking_id.html} </br></td>
       </tr>
-      <tr class="crm-event-manage-eventinfo-form-block-is_active">
+      <tr class="crm-event-manage-eventinfo-form-block-track_register">
         <td>&nbsp;</td>
-        <td>{$form.primary_page_experiment.html} {$form.primary_page_experiment.label}</td>
+        <td>{$form.track_register.html} {$form.track_register.label}</td>
+      </tr>
+      <tr class="crm-event-manage-eventinfo-form-block-track_price_change">
+        <td>&nbsp;</td>
+        <td>{$form.track_price_change.html} {$form.track_price_change.label}</td>
+      </tr>
+      <tr class="crm-event-manage-eventinfo-form-block-track_confirm_register">
+        <td>&nbsp;</td>
+        <td>{$form.track_confirm_register.html} {$form.track_confirm_register.label}</td>
+      </tr>
+      <tr class="crm-event-manage-eventinfo-form-block-track_ecommerce">
+        <td>&nbsp;</td>
+        <td>{$form.track_ecommerce.html} {$form.track_ecommerce.label}</td>
+      </tr>
+      <tr class="crm-event-manage-eventinfo-form-block-is_experiment">
+        <td>&nbsp;</td>
+        <td>{$form.is_experiment.html} {$form.is_experiment.label}</td>
       </tr> 
-      <tr class="crm-event-manage-eventinfo-form-block-title" id="experiment-id">
+      <tr class="crm-event-manage-eventinfo-form-block-experiment_id" id="experiment-id">
         <td>{$form.experiment_id.label}</td>
         <td>{$form.experiment_id.html} </br></td>
       </tr>
     </tbody>
   </table>  
 
-    <!--## Custom Event Tracking.. registration link was clicked how many times etc.-->
-    <!--
-    <tr class="crm-event-manage-eventinfo-form-block-is_active">
-      <td>&nbsp;</td>
-      <td>{$form.custom_event_tracking.html} {$form.custom_event_tracking.label}</td>
-    </tr>
-    -->
-    <!--## E-Commerce Tracking.. will tell you the revenue from FB/LinkedIn/ etc.-->
-    <!--
-    <tr class="crm-event-manage-eventinfo-form-block-is_active">
-      <td>&nbsp;</td>
-      <td>{$form.ecommerce_tracking.html} {$form.ecommerce_tracking.label}</td>
-    </tr>
-    -->
-    <!--## Primary Page Of Experiment?-->  
-   
-    
-    <!--## Experiment ID-->
-    
-  <!-- ##These buttons need to be present -->
   <div class="crm-submit-buttons">
      {include file="CRM/common/formButtons.tpl" location="bottom"}
   </div>
+
 </div>
 
 {include file="CRM/common/showHide.tpl"}
@@ -84,7 +81,7 @@
 <script type="text/javascript">
 cj(document).ready(function(){
       cj('#enable_tracking').change(function() {
-        cj('#tracking-params').toggle();
+        cj('#webtracking-params').toggle();
       });
 });    
 </script>

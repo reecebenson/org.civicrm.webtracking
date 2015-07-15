@@ -4,15 +4,15 @@
   <base>CRM/WebTracking</base>
   <class>WebTracking</class>
   <name>civicrm_webtracking</name>
-  <comment>This table will hold web tracking parameters for various pages.</comment>
+  <comment>This table will hold web tracking parameters for event and contribution pages</comment>
   <add>4.6</add>
   <log>true</log>
   <field>
     <name>id</name>
-    <title>WebTracking ID</title>
+    <title>Serial No.</title>
     <type>int unsigned</type>
     <required>true</required>
-    <comment>WebTracking ID</comment>
+    <comment>Serial No.</comment>
     <add>4.6</add>
   </field>
   <primaryKey>
@@ -20,27 +20,11 @@
     <autoincrement>true</autoincrement>
   </primaryKey>
   <field>
-    <name>enable_tracking</name>
-    <title>Enable Tracking</title>
-    <type>boolean</type>
-    <default>0</default>
-    <comment>User chooses to enable web tracking or not?</comment>
-    <add>4.6</add>
-  </field>
-  <field>
-    <name>tracking_id</name>
-    <title>UA ID</title>
-    <type>varchar</type>
-    <length>64</length>
-    <comment>Unique UAID provided by google analytics.</comment>
-    <add>4.6</add>
-  </field>
-  <field>
     <name>page_id</name>
     <title>Page ID</title>
     <type>int unsigned</type>
     <required>true</required>
-    <comment>Holds the id to the CiviEvent/CiviContribution/CiviDonation.</comment>
+    <comment>Holds the id of the Event/Contribution page</comment>
     <add>4.6</add>
   </field>
    <field>
@@ -49,7 +33,71 @@
     <type>varchar</type>
     <length>64</length>
     <required>true</required>
-    <comment>Whether the Page this row refers to is a CiviEvent/CiviContribution/CiviDonation Page.</comment>
+    <comment>Denotes whether the page is an event page or a contribution page</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>enable_tracking</name>
+    <title>Enable Tracking</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Denotes whether webtracking is enabled or not</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>tracking_id</name>
+    <title>Tracking ID</title>
+    <type>varchar</type>
+    <length>64</length>
+    <comment>Unique UAID provided by google analytics</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_register</name>
+    <title>Track Register</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Track the event of user clicking on the register button</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_price_change</name>
+    <title>Track Price Change</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Track the event of user changing the default price option</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_confirm_register</name>
+    <title>Track Confirm Register</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Track the event of user clicking on the confirm register button</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_ecommerce</name>
+    <title>Track Ecommerce</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Denotes whether ecommerce tracking is enabled or not</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>is_experiment</name>
+    <title>Is Experiment</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Denotes whether the page is the primary page of a google analytics experiment</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>experiment_id</name>
+    <title>Experiment ID</title>
+    <type>varchar</type>
+    <length>64</length>
+    <comment>Unique experiment ID provided by google analytics</comment>
     <add>4.6</add>
   </field>
 </table>

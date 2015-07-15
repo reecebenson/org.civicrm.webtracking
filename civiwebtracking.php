@@ -122,31 +122,21 @@ function civiwebtracking_civicrm_alterSettingsFolders(&$metaDataFolders = NULL) 
   _civiwebtracking_civix_civicrm_alterSettingsFolders($metaDataFolders);
 }
 
-/**
- * Functions below this ship commented out. Uncomment as required.
- *
 
 /**
- * Implements hook_civicrm_preProcess().
- *
- * @link http://wiki.civicrm.org/confluence/display/CRMDOC/hook_civicrm_preProcess
- *
-function civiwebtracking_civicrm_preProcess($formName, &$form) {
-
-}
-
+* Adds a new tab for configuring web tracking parameters
 */
-
-
 function civiwebtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
-//check if the tab set is Event manage
+
+  // Check if the tab set is event manage
   if ($tabsetName == 'civicrm/event/manage') {
+
     if (!empty($context)) {
       $eventID = $context['event_id'];
       $url = CRM_Utils_System::url( 'civicrm/event/manage/webtracking',
         "reset=1&snippet=5&force=1&id=$eventID&action=update&component=event" );
-    //add a new WebTracking tab along with url 
-     $tab['webtracking'] = array(
+      // Add a new WebTracking tab along with url 
+      $tab['webtracking'] = array(
         'title' => ts('WebTracking'),
         'link' => $url,
         'valid' => 1,
@@ -156,80 +146,99 @@ function civiwebtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
     }
     else {
       $tab['webtracking'] = array(
-      'title' => ts('WebTracking'),
+        'title' => ts('WebTracking'),
         'url' => 'civicrm/event/manage/webtracking',
       );
     }
  
   //Insert this tab in the end  
   $tabs = array_merge($tabs,$tab);
-
   }
 }
+
+/**
+* This hook is invoked when the event page is rendered
+* Based on the web tracking parameters it invokes certain javascript/jquery functions which talk to google analytics
+*/
 
 function civiwebtracking_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
-  if ($pageName == 'CRM_Event_Page_EventInfo') 
-  {   
+  if ($pageName == 'CRM_Event_Page_EventInfo') {   
     $trackingParams = array('page_id' => $page->getVar('_id'), 'page_category' => "civicrm_event");
     CRM_Civiwebtracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
-    if($trackingValues['enable_tracking'] == 1)
-    {
+
+    if($trackingValues['enable_tracking'] == 1) {
+      // General script for web tracking
+      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id']));
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/WebTracking.js',10,'html-header');
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id'], 'pageview' => 1));
+      CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');");
+
+      // Script for event tracking
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/EventTracking.js');
 
-      $session = CRM_Core_Session::singleton();
-      if(isset($_GET['utm_source'])) $session->set('utm_source',$_GET['utm_source']);
-      else $session->set('utm_source','general');
+      // Appropriate js function call if track_register is enabled 
+      if ($trackingValues['track_register'] == 1)
+        CRM_Core_Resources::singleton()->addScript('trackRegister();');
+
+      // Saving the utm source in the session variable if track_ecommerce is enabled
+      if($trackingValues['track_ecommerce'] == 1) {
+        $session = CRM_Core_Session::singleton();
+        if(isset($_GET['utm_source'])) 
+          $session->set('utm_source',$_GET['utm_source']);
+        else 
+          $session->set('utm_source','general');
+      }  
     }
   }
 }
 
+/**
+* This hook is invoked when the 'confirm register' and 'thank you' form is rendered
+* Based on the web tracking parameters it invokes certain javascript/jquery functions which talk to google analytics
+*/
 function civiwebtracking_civicrm_buildForm($formName, &$form) {
-  if ($formName == 'CRM_Event_Form_Registration_Register') {
+
+  $eventFormNames = array('CRM_Event_Form_Registration_Register', 'CRM_Event_Form_Registration_ThankYou', 'CRM_Event_Form_Registration_Confirm');
+  if (in_array($formName, $eventFormNames)) {
 
     $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
     CRM_Civiwebtracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
-    if($form->_values['event']['is_monetary'] == 1 && $trackingValues['enable_tracking'] == 1)
-    {
+    if ($trackingValues['enable_tracking'] == 1) {
+      // General script for web tracking
+      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id']));
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/WebTracking.js',10,'html-header');
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id'], 'pageview' => 1));
+
+      // Script for event tracking
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/EventTracking.js');
     }
-  }
+    else 
+      return;
 
-  else if ($formName == 'CRM_Event_Form_Registration_ThankYou') {
-
-    $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
-    CRM_Civiwebtracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
-    if($trackingValues['enable_tracking'] == 1)
-    {
-      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/WebTracking.js',10,'html-header');
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id'], 'pageview' => 0));
-      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/EventTracking.js');
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => $form->_trxnId, 'totalAmount' => $form->_totalAmount));
-      
-      // fetching the source from the session and adding it as a variable.
-      $session = CRM_Core_Session::singleton();
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
-      if($form->_trxnId)CRM_Core_Resources::singleton()->addScript('ecommerce();');
+    if ($formName == 'CRM_Event_Form_Registration_Register') {
+      if($form->_values['event']['is_monetary'] == 1) {
+        CRM_Core_Resources::singleton()->addScript('trackPriceChange();');  
+      }
     }
-  }
 
-   else if ($formName == 'CRM_Event_Form_Registration_Confirm') {
-    $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
-    CRM_Civiwebtracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
-    if($trackingValues['enable_tracking'] == 1)
-    {
-      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/WebTracking.js',10,'html-header');
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id'], 'pageview' => 0));
-      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/EventTracking.js');
-      CRM_Core_Resources::singleton()->addScript('confirm();');
+    else if ($formName == 'CRM_Event_Form_Registration_ThankYou') {
+        CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => $form->_trxnId, 'totalAmount' => $form->_totalAmount));
+        // Fetching the source from the session and adding it as a variable.
+        $session = CRM_Core_Session::singleton();
+        CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
+        if ($form->_trxnId)
+          CRM_Core_Resources::singleton()->addScript('trackEcommerce();');
     }
-  }    
+
+    else if ($formName == 'CRM_Event_Form_Registration_Confirm') {
+      CRM_Core_Resources::singleton()->addScript('trackConfirmRegister();');
+    }    
+  } 
 }
 
+/**
+* This hook is used to add the web tracking report link to the navigation menu
+*
+*/
 function civiwebtracking_civicrm_navigationMenu(&$params) {
  
   // Check that our item doesn't already exist
@@ -247,17 +256,18 @@ function civiwebtracking_civicrm_navigationMenu(&$params) {
   }
   // Find the Report menu
   $reportID = CRM_Core_DAO::getFieldValue('CRM_Core_DAO_Navigation', 'Reports', 'id', 'name');
-      $params[$reportID]['child'][$navId] = array (
-        'attributes' => array (
-          'label' => ts('Web Tracking Report',array('domain' => 'org.civicrm.module.civiwebtracking')),
-          'name' => 'Web Tracking Reaport',
-          'url' => 'civicrm/report/webtracking',
-          'permission' => 'access CiviReport,access CiviEvent',
-          'operator' => 'OR',
-          'separator' => 1,
-          'parentID' => $reportID,
-          'navID' => $navId,
-          'active' => 1
+
+  $params[$reportID]['child'][$navId] = array (
+    'attributes' => array (
+      'label' => ts('Web Tracking Report',array('domain' => 'org.civicrm.module.civiwebtracking')),
+      'name' => 'Web Tracking Report',
+      'url' => 'civicrm/report/webtracking',
+      'permission' => 'access CiviReport,access CiviEvent',
+      'operator' => 'OR',
+      'separator' => 1,
+      'parentID' => $reportID,
+      'navID' => $navId,
+      'active' => 1
     )   
   );  
 }

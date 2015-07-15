@@ -139,7 +139,7 @@ class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
    *
    * @var boolean
    */
-  public $is_expreriment;
+  public $is_experiment;
    /**
    * Unique experiment ID provided by google analytics
    *
@@ -226,8 +226,8 @@ class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
           'title' => ts('Track Ecommerce') ,
           'description' => 'Denotes whether ecommerce tracking is enabled or not',
         ) ,
-        'is_expreriment' => array(
-          'name' => 'is_expreriment',
+        'is_experiment' => array(
+          'name' => 'is_experiment',
           'type' => CRM_Utils_Type::T_BOOLEAN,
           'title' => ts('Is Experiment') ,
           'description' => 'Denotes whether the page is the primary page of a google analytics experiment',
@@ -263,7 +263,7 @@ class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
         'track_price_change' => 'track_price_change',
         'track_confirm_register' => 'track_confirm_register',
         'track_ecommerce' => 'track_ecommerce',
-        'is_expreriment' => 'is_expreriment',
+        'is_experiment' => 'is_experiment',
         'experiment_id' => 'experiment_id',
       );
     }

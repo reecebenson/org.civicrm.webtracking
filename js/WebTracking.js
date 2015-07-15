@@ -3,8 +3,6 @@
   m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
   })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-  ga('create', CRM.vars.WebTracking.tracking_id, {
-  'cookieDomain': 'none'
-  });
-  if(CRM.vars.WebTracking.pageview == 1)ga('send', 'pageview');
-  
+ga('create', CRM.vars.WebTracking.tracking_id, {
+'cookieDomain': 'none'
+});

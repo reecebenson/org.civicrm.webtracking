@@ -26,14 +26,6 @@
  */
 
 /**
- *
- * @package CRM
- * @copyright CiviCRM LLC (c) 2004-2015
- * $Id$
- *
- */
-
-/**
  * BAO object for civicrm_webtracking table
  */
 class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTracking {
@@ -45,7 +37,7 @@ class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTra
    *   (reference) an assoc array of name/value pairs.
    *
    * @return object
-   *   $webtracking CRM_Core_BAO_WebTracking object
+   *   $webtracking CRM_Core_DAO_WebTracking object
    */
   public static function &add(&$params) {
     $webtracking = new CRM_Civiwebtracking_DAO_WebTracking();
@@ -53,7 +45,6 @@ class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTra
     $webtracking->save();
     return $webtracking;
   }
-
 
  /**
    * Fetch object based on array of properties.
@@ -79,14 +70,12 @@ class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTra
    * Delete the webtracking entry.
    *
    * @param int $page_id
-   *   Note id.
    * @param string $page_category
    *
    * @return void
    * 
    */
   public static function del($page_id, $page_category) {
-
     $webtracking = new CRM_Civiwebtracking_DAO_WebTracking();
     $webtracking->page_id = $page_id;
     $webtracking->page_category = $page_category;
