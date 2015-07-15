@@ -31,7 +31,7 @@
   </div>
 
   <table class="form-table-webtracking" border="8px">         
-    <!--##TODO: Fix the names of the  classes in this file-->
+
     <tr class="crm-event-manage-webtracking-form-block-enable_tracking" id="enable-tracking">
       <td>&nbsp;</td>
       <td>{$form.enable_tracking.html} {$form.enable_tracking.label}</td>

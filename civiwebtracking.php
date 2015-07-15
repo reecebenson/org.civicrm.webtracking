@@ -171,7 +171,16 @@ function civiwebtracking_civicrm_pageRun(&$page) {
       // General script for web tracking
       CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id']));
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/WebTracking.js',10,'html-header');
-      CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');");
+
+      if($trackingValues['is_experiment'] == 1) {
+        // Script for the experiment
+        CRM_Core_Resources::singleton()->addVars('WebTracking', array('experiment_id' => $trackingValues['experiment_id']));
+        CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/Experiment.js',11,'html-header');
+        CRM_Core_Resources::singleton()->addScript("utmx('url','A/B');",12,'html-header');
+        CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');",13,'html-header');
+      }
+      else
+        CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');",11,'html-header');
 
       // Script for event tracking
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.module.civiwebtracking', 'js/EventTracking.js');
