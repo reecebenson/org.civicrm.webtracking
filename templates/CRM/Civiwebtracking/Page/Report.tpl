@@ -17,7 +17,7 @@
   <div class="Content">
     <div class="Dashboard Dashboard--full">
       <header class="Dashboard-header">
-        <ul class="FlexGrid">
+        <ul class="FlexGrid" margin="0" padding="0">
           <li class="FlexGrid-item">
             <div class="Titles">
               <h1 class="Titles-main" id="view-name">Dashboard</h1>

@@ -125,7 +125,8 @@ gapi.analytics.ready(function() {
       container: 'event-view-container',
       type: 'TABLE',
       options: {
-        width: '100%'
+        width: '100%',
+        sort: 'disable'
       }
     }
   });
@@ -143,7 +144,8 @@ gapi.analytics.ready(function() {
       container: 'transaction-view-container',
       type: 'TABLE',
       options: {
-        width: '100%'
+        width: '100%',
+        sort: 'disable'
       }
     }
   });

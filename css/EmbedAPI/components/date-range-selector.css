@@ -15,7 +15,7 @@ limitations under the License.
 */
 
 
-@import '../base/custom-media';
+@import '../base/custom-media.css';
 
 /**
  * DateRangeSelector Component
@@ -26,14 +26,20 @@ limitations under the License.
 }
 
 .DateRangeSelector {
-  display: flex;
-  flex-wrap: nowrap;
+  display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-flex-wrap: nowrap;
+    -ms-flex-wrap: nowrap;
+    flex-wrap: nowrap;
   margin: 0 0 -1em -1em;
 }
 
 .DateRangeSelector-item {
   margin: 0 0 1em 1em;
   flex: 1 0 calc((100% - 4em)/2);
+  -webkit-flex: 1 0 calc((100% - 4em)/2);
 }
 
 .DateRangeSelector-item > label {

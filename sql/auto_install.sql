@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS `civicrm_webtracking`;
 -- *
 -- * civicrm_webtracking
 -- *
--- * This table will hold web tracking parameters for event and contribution pages.
+-- * This table will hold web tracking parameters for event and contribution pages
 -- *
 -- *******************************************************/
 CREATE TABLE `civicrm_webtracking` (
