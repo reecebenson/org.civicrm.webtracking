@@ -39,12 +39,12 @@
 
     <table class="form-table-webtracking" id="webtracking-params">
       <tr class="crm-event-manage-webtracking-form-block-tracking_id">
-          <td>{$form.tracking_id.label}</td>
+          <td>{$form.tracking_id.label} {help id="tracking-id"}</td>
           <td>{$form.tracking_id.html} </br></td>
       </tr>
       <tr class="crm-event-manage-eventinfo-form-block-ga_event_tracking">
         <td>&nbsp;</td>
-        <td>{$form.ga_event_tracking.html} {$form.ga_event_tracking.label}</td>
+        <td>{$form.ga_event_tracking.html} {$form.ga_event_tracking.label} {help id="ga-event-tracking"}</td>
       </tr>
       <tbody id="eventtracking-params">
         <tr class="crm-event-manage-eventinfo-form-block-track_info">
@@ -70,14 +70,14 @@
       </tbody>
       <tr class="crm-event-manage-eventinfo-form-block-track_ecommerce">
         <td>&nbsp;</td>
-        <td>{$form.track_ecommerce.html} {$form.track_ecommerce.label}</td>
+        <td>{$form.track_ecommerce.html} {$form.track_ecommerce.label} {help id="track-ecommerce"}</td>
       </tr>
       <tr class="crm-event-manage-eventinfo-form-block-is_experiment">
         <td>&nbsp;</td>
-        <td>{$form.is_experiment.html} {$form.is_experiment.label}</td>
+        <td>{$form.is_experiment.html} {$form.is_experiment.label} {help id="is-experiment"}</td>
       </tr> 
       <tr class="crm-event-manage-eventinfo-form-block-experiment_id" id="experiment-id">
-        <td>{$form.experiment_id.label}</td>
+        <td>{$form.experiment_id.label} {help id="experiment-id"}</td>
         <td>{$form.experiment_id.html} </br></td>
       </tr>
     </table>

@@ -131,13 +131,16 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
   if ($tabsetName == 'civicrm/event/manage') {
     if (!empty($context)) {
       $eventID = $context['event_id'];
+      $trackingParams = array('page_id' => $eventID, 'page_category' => "civicrm_event");
+      CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+
       $url = CRM_Utils_System::url( 'civicrm/event/manage/webtracking',
         "reset=1&snippet=5&force=1&id=$eventID&action=update&component=event" );
       // Add a new WebTracking tab along with url 
       $tab['webtracking'] = array(
         'title' => ts('Web Tracking'),
         'link' => $url,
-        'valid' => 1,
+        'valid' => $trackingValues['enable_tracking'],
         'active' => 1,
         'current' => false,
       );
@@ -146,11 +149,21 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
       $tab['webtracking'] = array(
         'title' => ts('Web Tracking'),
         'url' => 'civicrm/event/manage/webtracking',
+        'field' => 'enable_tracking',
       );
     }
  
     //Insert this tab in the end  
     $tabs = array_merge($tabs,$tab);
+  }
+
+  if ($tabsetName == 'civicrm/event/manage/rows') {
+    if (!empty($context)) {
+      $eventID = $context['event_id'];
+      $trackingParams = array('page_id' => $eventID, 'page_category' => "civicrm_event");
+      CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+      $tabs[$eventID]['enable_tracking'] = $trackingValues['enable_tracking'];
+    }
   }
 }
 
@@ -168,6 +181,7 @@ function webtracking_civicrm_pageRun(&$page) {
       // General script for web tracking
       CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id']));
       CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/WebTracking.js',10,'html-header');
+      $page->assign('enable_tracking',1);
 
       if ($trackingValues['is_experiment'] == 1) {
         // Script for the experiment
@@ -195,6 +209,9 @@ function webtracking_civicrm_pageRun(&$page) {
           $session->set('utm_source','general');
         }  
       }  
+    }
+    else {
+      $page->assign('enable_tracking',0);
     }
   }
 }
