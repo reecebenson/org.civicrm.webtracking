@@ -2,14 +2,14 @@
 <menu>
   <item>
     <path>civicrm/event/manage/webtracking</path>
-    <page_callback>CRM_Civiwebtracking_Form_WebTracking</page_callback>
-    <title>WebTracking</title>
+    <page_callback>CRM_WebTracking_Form_WebTracking</page_callback>
+    <title>Web Tracking</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
   <item>
     <path>civicrm/report/webtracking</path>
-    <page_callback>CRM_Civiwebtracking_Page_Report</page_callback>
-    <title>WebTrackingReport</title>
+    <page_callback>CRM_WebTracking_Page_Report</page_callback>
+    <title>Web Tracking Report</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>
 </menu>

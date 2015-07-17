@@ -75,15 +75,29 @@
 
 </div>
 
-{include file="CRM/common/showHide.tpl"}
-
 {literal}
 <script type="text/javascript">
-cj(document).ready(function(){
-      cj('#enable_tracking').change(function() {
-        cj('#webtracking-params').toggle();
-      });
-});    
+
+CRM.$(function($) {
+
+  if (!$('#is_experiment').is(':checked')) {
+    $('#experiment-id').hide();
+  }
+
+  if (!$('#enable_tracking').is(':checked')) {
+    $('#webtracking-params').hide();
+  }
+
+  $('#is_experiment').on('click', function() {
+    $('#experiment-id').toggle();
+  });
+
+  $('#enable_tracking').on('click', function() {
+    $('#webtracking-params').toggle();
+  });
+
+});
+
 </script>
 {/literal}
 

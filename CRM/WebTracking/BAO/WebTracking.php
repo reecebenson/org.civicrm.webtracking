@@ -28,7 +28,7 @@
 /**
  * BAO object for civicrm_webtracking table
  */
-class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTracking {
+class CRM_WebTracking_BAO_WebTracking extends CRM_WebTracking_DAO_WebTracking {
 
   /**
    * Takes an associative array and creates a webtracking object.
@@ -40,7 +40,7 @@ class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTra
    *   $webtracking CRM_Core_DAO_WebTracking object
    */
   public static function &add(&$params) {
-    $webtracking = new CRM_Civiwebtracking_DAO_WebTracking();
+    $webtracking = new CRM_WebTracking_DAO_WebTracking();
     $webtracking->copyValues($params);
     $webtracking->save();
     return $webtracking;
@@ -57,7 +57,7 @@ class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTra
    * @return CRM_Core_BAO_WebTracking
    */
   public static function retrieve(&$params, &$defaults) {   
-    $webtracking = new CRM_Civiwebtracking_BAO_WebTracking();
+    $webtracking = new CRM_WebTracking_BAO_WebTracking();
     $webtracking->copyValues($params);
     if ($webtracking->find(TRUE)) {
       CRM_Core_DAO::storeValues($webtracking, $defaults);
@@ -76,7 +76,7 @@ class CRM_Civiwebtracking_BAO_WebTracking extends CRM_Civiwebtracking_DAO_WebTra
    * 
    */
   public static function del($page_id, $page_category) {
-    $webtracking = new CRM_Civiwebtracking_DAO_WebTracking();
+    $webtracking = new CRM_WebTracking_DAO_WebTracking();
     $webtracking->page_id = $page_id;
     $webtracking->page_category = $page_category;
     $webtracking->find();

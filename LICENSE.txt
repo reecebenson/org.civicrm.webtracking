@@ -1,5 +1,5 @@
-Package: org.civicrm.module.civiwebtracking
-Copyright (C) 2015, FIXME <vishalagarwal3010@gmail.com>
+Package: org.civicrm.webtracking
+Copyright (C) 2015, Vishal Agarwal <vishalagarwal3010@gmail.com>
 Licensed under the GNU Affero Public License 3.0 (below).
 
 -------------------------------------------------------------------------------

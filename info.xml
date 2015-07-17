@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<extension key="org.civicrm.module.civiwebtracking" type="module">
-  <file>civiwebtracking</file>
-  <name>CiviWebTracking Module Extension</name>
-  <description>Enables web tracking features for event pages</description>
+<extension key="org.civicrm.webtracking" type="module">
+  <file>webtracking</file>
+  <name>Web Tracking Extension</name>
+  <description>Enables web tracking features for event and contribution pages</description>
   <license>AGPL-3.0</license>
   <maintainer>
     <author>Vishal Agarwal</author>
     <email>vishalagarwal3010@gmail.com</email>
   </maintainer>
   <urls>
-    <url desc="Main Extension Page">https://github.com/VishalAgarwal/CiviWebExtension</url>
-    <url desc="Documentation">https://github.com/VishalAgarwal/CiviWebExtension</url>
+    <url desc="Main Extension Page">https://github.com/VishalAgarwal/org.civicrm.webtracking</url>
+    <url desc="Documentation">https://github.com/VishalAgarwal/org.civicrm.webtracking</url>
     <url desc="Support">http://forum.civicrm.org/index.php/board,90.0.html</url>
     <url desc="Licensing">http://www.gnu.org/licenses/agpl-3.0.html</url>
   </urls>
@@ -20,8 +20,8 @@
   <compatibility>
     <ver>4.2</ver>
   </compatibility>
-  <comments>For support please contact me on my email. (vishalagarwal3010@gmail.com)</comments>
+  <comments>For support please contact me on my email (vishalagarwal3010@gmail.com)</comments>
   <civix>
-    <namespace>CRM/Civiwebtracking</namespace>
+    <namespace>CRM/WebTracking</namespace>
   </civix>
 </extension>

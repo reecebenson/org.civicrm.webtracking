@@ -1,12 +1,4 @@
 
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<link href='//fonts.googleapis.com/css?family=Open+Sans:600,400,300' rel='stylesheet'>
-<meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Embed API Dashboard</title>  
-</head>
-
 <div id='EmbedAPI'>
 
   <aside class="Header-auth" id="header-auth">
@@ -17,7 +9,7 @@
   <div class="Content">
     <div class="Dashboard Dashboard--full">
       <header class="Dashboard-header">
-        <ul class="FlexGrid" margin="0" padding="0">
+        <ul class="FlexGrid">
           <li class="FlexGrid-item">
             <div class="Titles">
               <h1 class="Titles-main" id="view-name">Dashboard</h1>

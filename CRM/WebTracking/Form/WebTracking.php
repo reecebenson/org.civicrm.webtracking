@@ -28,7 +28,7 @@
 /**
  * This class generates form components for processing Event Web Tracking
  */
-class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
+class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
 
   /**
    * Set variables up before form is built.
@@ -36,7 +36,7 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    * @return void
    */
   public function preProcess() {
-    CRM_Core_Resources::singleton()->addStyleFile('org.civicrm.module.civiwebtracking', 'css/webTrackingForm.css');
+    CRM_Core_Resources::singleton()->addStyleFile('org.civicrm.webtracking', 'css/web-tracking-form.css');
     parent::preProcess();
   }
 
@@ -50,26 +50,7 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $params['page_id']=$this->_id;
     $params['page_category']="civicrm_event";
     $defaults = array();
-    CRM_Civiwebtracking_BAO_WebTracking::retrieve($params,$defaults);
-
-    $this->_showHide = new CRM_Core_ShowHideBlocks();
-
-    if(empty($defaults)) {
-      // When the values have not been set previosuly, hide the tracking params and the experiment id text field
-      $this->_showHide->addHide('webtracking-params');
-      $this->_showHide->addHide('experiment-id');
-    }
-    else if (!$defaults['enable_tracking']) {
-      // When webtracking is disabled, hide the tracking params
-      $this->_showHide->addHide('webtracking-params');
-      if(!$defaults['is_experiment'])
-        $this->_showHide->addHide('experiment-id');  
-    }  
-    else if(!$defaults['is_experiment']){
-      // When webtracking is enabled but page is not the primary page of an experiment, hide the experiment id
-      $this->_showHide->addHide('experiment-id');
-    }  
-    $this->_showHide->addToTemplate();
+    CRM_WebTracking_BAO_WebTracking::retrieve($params, $defaults);
 
     return $defaults;
   }
@@ -103,13 +84,12 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $this->addElement('checkbox', 'track_ecommerce', ts('Enable Ecommerce Tracking'));
 
     // Checkbox to ask whether the page is the primary page of the experiment 
-    $this->addElement('checkbox', 'is_experiment', ts('Primary Page Of Experiment'), NULL,
-      array('onclick' => "return showHideByValue('is_experiment','','experiment-id','table-row','radio',false);"));
+    $this->addElement('checkbox', 'is_experiment', ts('Primary Page Of Experiment'));
 
     // Text field to input the experiment id
     $this->add('text', 'experiment_id', ts('Experiment ID'));
 
-    $this->addFormRule(array('CRM_Civiwebtracking_Form_WebTracking', 'formRule'));
+    $this->addFormRule(array('CRM_WebTracking_Form_WebTracking', 'formRule'));
 
     parent::buildQuickForm();
   }
@@ -125,11 +105,12 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
   public static function formRule($values) {
     $errors = array();
 
-    if(isset($values['enable_tracking']) && $values['enable_tracking'] == 1)
-    {
+    if (isset($values['enable_tracking']) && $values['enable_tracking'] == 1) {
       // Checking that UAID provided by the customer has the string 'UA-' as its prefix
       $pos = strpos($values['tracking_id'],'UA-'); 
-      if($pos===false || $pos!==0) $errors['tracking_id'] = ts('You have selected to enable web tracking, please provide a valid tracking id');
+      if ($pos===false || $pos!==0) {
+	      $errors['tracking_id'] = ts('You have selected to enable web tracking, please provide a valid tracking id');
+      }
     }
     
     return $errors;
@@ -149,11 +130,10 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $existParams['page_category'] = "civicrm_event";
     $existingEnrty = array();
     
-    CRM_Civiwebtracking_BAO_WebTracking::retrieve($existParams,$existingEnrty);
+    CRM_WebTracking_BAO_WebTracking::retrieve($existParams, $existingEnrty);
 
     // Setting up the params array with the values obtained from the form 
-    if(!empty($existingEnrty))
-    {
+    if (!empty($existingEnrty)) {
        $params['id'] = $existingEnrty['id']; 
     }
     $params['page_id'] = $this->_id;
@@ -168,7 +148,7 @@ class CRM_Civiwebtracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $params['experiment_id'] = CRM_Utils_Array::value('experiment_id', $params, NULL);
 
     // Updating the database with the new entry
-    $event = CRM_Civiwebtracking_BAO_WebTracking::add($params);
+    $event = CRM_WebTracking_BAO_WebTracking::add($params);
 
     if ($this->_action & CRM_Core_Action::ADD) {
       $url = 'civicrm/event/manage/webtracking';

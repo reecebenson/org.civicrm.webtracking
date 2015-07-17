@@ -151,7 +151,7 @@ limitations under the License.
 }
 .Dashboard::after {
     color: #777;
-    content: 'Authorize to view demo...';
+    content: 'Authorize to view the report...';
     font-size: 1.1em;
     font-weight: 300;
     left: 1.5em;

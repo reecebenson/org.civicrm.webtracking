@@ -33,7 +33,7 @@
  */
 require_once 'CRM/Core/DAO.php';
 require_once 'CRM/Utils/Type.php';
-class CRM_Civiwebtracking_DAO_WebTracking extends CRM_Core_DAO
+class CRM_WebTracking_DAO_WebTracking extends CRM_Core_DAO
 {
   /**
    * static instance to hold the table name
