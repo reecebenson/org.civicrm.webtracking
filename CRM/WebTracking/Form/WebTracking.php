@@ -66,25 +66,34 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     $this->applyFilter('__ALL__', 'trim');
 
     // Checkbox to ask whether or not to enable web tracking
-    $this->addElement('checkbox', 'enable_tracking', ts('Enable Web Tracking'));
+    $this->addElement('checkbox', 'enable_tracking', ts('Enable web tracking'));
 
     // Text field to input the tracking id
-     $this->add('text', 'tracking_id', ts('Tracking ID'));
+    $this->add('text', 'tracking_id', ts('Tracking ID'));
 
-    // Checkbox to ask whether or not to track when the user clicks on register
-    $this->addElement('checkbox', 'track_register', ts('Track Click On Register'));
+    // Checkbox to ask whether or not to enable event tracking
+    $this->addElement('checkbox', 'ga_event_tracking', ts('Enable event tracking'));
+    
+    // Checkbox to ask whether or not to track when the user visits the info page
+    $this->addElement('checkbox', 'track_info', ts('Track visit to info page'));
+
+    // Checkbox to ask whether or not to track when the user visits the registration page
+    $this->addElement('checkbox', 'track_register', ts('Track visit to registration page'));
+
+    // Checkbox to ask whether or not to track when the user visits the confirmation page
+    $this->addElement('checkbox', 'track_confirm_register', ts('Track visit to confirmation page'));
+    
+    // Checkbox to ask whether or not to track when the user visits the thank you page
+    $this->addElement('checkbox', 'track_thank_you', ts('Track visit to thank you page'));
 
     // Checkbox to ask whether or not to track when the user changes default price option
-    $this->addElement('checkbox', 'track_price_change', ts('Track Price Change'));
-
-    // Checkbox to ask whether or not to track when the user clicks on confirm register
-    $this->addElement('checkbox', 'track_confirm_register', ts('Track Click On Confirm Register'));
+    $this->addElement('checkbox', 'track_price_change', ts('Track price change'));
 
     // Checkbox to ask whether or not to enable ecommerce tracking
-    $this->addElement('checkbox', 'track_ecommerce', ts('Enable Ecommerce Tracking'));
+    $this->addElement('checkbox', 'track_ecommerce', ts('Enable source tracking'));
 
     // Checkbox to ask whether the page is the primary page of the experiment 
-    $this->addElement('checkbox', 'is_experiment', ts('Primary Page Of Experiment'));
+    $this->addElement('checkbox', 'is_experiment', ts('Primary page of experiment'));
 
     // Text field to input the experiment id
     $this->add('text', 'experiment_id', ts('Experiment ID'));
@@ -109,7 +118,13 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
       // Checking that UAID provided by the customer has the string 'UA-' as its prefix
       $pos = strpos($values['tracking_id'],'UA-'); 
       if ($pos===false || $pos!==0) {
-	      $errors['tracking_id'] = ts('You have selected to enable web tracking, please provide a valid tracking id');
+	      $errors['tracking_id'] = ts('Please provide a valid tracking id');
+      }
+    }
+
+    if (isset($values['is_experiment']) && $values['is_experiment'] == 1) {
+      if ($values['experiment_id'] == '') {
+        $errors['experiment_id'] = ts('Please provide a valid experiment id');
       }
     }
     
@@ -138,12 +153,19 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     }
     $params['page_id'] = $this->_id;
     $params['page_category']="civicrm_event";
+
     $params['enable_tracking'] = CRM_Utils_Array::value('enable_tracking', $params, FALSE);
     $params['tracking_id'] = CRM_Utils_Array::value('tracking_id', $params, NULL);
+
+    $params['ga_event_tracking'] = CRM_Utils_Array::value('ga_event_tracking', $params, FALSE);
+    $params['track_info'] = CRM_Utils_Array::value('track_info', $params, FALSE);
     $params['track_register'] = CRM_Utils_Array::value('track_register', $params, FALSE);
-    $params['track_price_change'] = CRM_Utils_Array::value('track_price_change', $params, FALSE);
     $params['track_confirm_register'] = CRM_Utils_Array::value('track_confirm_register', $params, FALSE);
+    $params['track_thank_you'] = CRM_Utils_Array::value('track_thank_you', $params, FALSE);
+    $params['track_price_change'] = CRM_Utils_Array::value('track_price_change', $params, FALSE);
+    
     $params['track_ecommerce'] = CRM_Utils_Array::value('track_ecommerce', $params, FALSE);
+
     $params['is_experiment'] = CRM_Utils_Array::value('is_experiment', $params, FALSE);
     $params['experiment_id'] = CRM_Utils_Array::value('experiment_id', $params, NULL);
 

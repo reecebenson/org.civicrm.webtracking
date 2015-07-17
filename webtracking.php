@@ -162,7 +162,7 @@ function webtracking_civicrm_pageRun(&$page) {
   $pageName = $page->getVar('_name');
   if ($pageName == 'CRM_Event_Page_EventInfo') {   
     $trackingParams = array('page_id' => $page->getVar('_id'), 'page_category' => "civicrm_event");
-    CRM_webtracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+    CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
 
     if ($trackingValues['enable_tracking'] == 1) {
       // General script for web tracking
@@ -180,12 +180,9 @@ function webtracking_civicrm_pageRun(&$page) {
         CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');",11,'html-header');
       }
 
-      // Script for event tracking
-      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/EventTracking.js');
-
-      // Appropriate js function call if track_register is enabled 
-      if ($trackingValues['track_register'] == 1) {
-        CRM_Core_Resources::singleton()->addScript('trackRegister();');
+      // Appropriate js function call if track_info is enabled 
+      if ($trackingValues['track_info'] == 1) {
+        CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Info Page', 'Viewed')");
       }  
 
       // Saving the utm source in the session variable if track_ecommerce is enabled
@@ -212,7 +209,7 @@ function webtracking_civicrm_buildForm($formName, &$form) {
   if (in_array($formName, $eventFormNames)) {
 
     $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
-    CRM_webtracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+    CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
 
     if ($trackingValues['enable_tracking'] == 1) {
       // General script for web tracking
@@ -227,25 +224,33 @@ function webtracking_civicrm_buildForm($formName, &$form) {
     }
 
     if ($formName == 'CRM_Event_Form_Registration_Register') {
-      if($form->_values['event']['is_monetary'] == 1) {
-        CRM_Core_Resources::singleton()->addScript('trackPriceChange();');
+      if ($trackingValues['track_register'] == 1) {
         CRM_Core_Resources::singleton()->addScript('trackViewRegistration();');
-        //CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Viewed Resistration Page', 'click');", 11, 'html-header');  
+      }
+      if($form->_values['event']['is_monetary'] == 1 && $trackingValues['track_price_change'] == 1) {
+        CRM_Core_Resources::singleton()->addScript('trackPriceChange();');
       }
     }
 
     else if ($formName == 'CRM_Event_Form_Registration_ThankYou') {
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => $form->_trxnId, 'totalAmount' => $form->_totalAmount));
-      // Fetching the source from the session and adding it as a variable.
-      $session = CRM_Core_Session::singleton();
-      CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
-      if ($form->_trxnId) {
-        CRM_Core_Resources::singleton()->addScript('trackEcommerce();');
+      if ($trackingValues['track_ecommerce'] == 1) {
+        CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => $form->_trxnId, 'totalAmount' => $form->_totalAmount));
+        // Fetching the source from the session and adding it as a variable.
+        $session = CRM_Core_Session::singleton();
+        CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
+        if ($form->_trxnId) {
+          CRM_Core_Resources::singleton()->addScript('trackEcommerce();');
+        }
+      }
+      if ($trackingValues['track_thank_you'] == 1) {
+        CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Thank You Page', 'Viewed')");
       }
     }
 
     else if ($formName == 'CRM_Event_Form_Registration_Confirm') {
-      CRM_Core_Resources::singleton()->addScript('trackConfirmRegister();');
+      if ($trackingValues['track_confirm_register'] == 1) {
+        CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Confirmation Page', 'Viewed')");
+      }
     }    
   } 
 }

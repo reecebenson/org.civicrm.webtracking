@@ -1,11 +1,12 @@
-.form-table-webtracking table {
+table.form-table-webtracking {
 	table-layout: fixed;
 	width: 600px;
+	margin: 0 0 0 0;
 }
 
 .form-table-webtracking td:first-child {
 	text-align: right;
-	width: 200px;
+	width: 190px;
 }
 
 .form-table-webtracking td {

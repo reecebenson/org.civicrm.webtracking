@@ -111,23 +111,41 @@ class CRM_WebTracking_DAO_WebTracking extends CRM_Core_DAO
    */
   public $tracking_id;
    /**
-   * Track the event of user clicking on the register button
+   * Denotes whether event tracking is enabled or not
+   *
+   * @var boolean
+   */
+  public $ga_event_tracking;
+   /**
+   * Track the event of users visiting the info page
+   *
+   * @var boolean
+   */
+  public $track_info;
+  /**
+   * Track the event of users visiting the registration page
    *
    * @var boolean
    */
   public $track_register;
+  /**
+   * Track the event of users visiting the confirmation page
+   *
+   * @var boolean
+   */
+  public $track_confirm_register;
+  /**
+   * Track the event of users visiting the thank you page
+   *
+   * @var boolean
+   */
+  public $track_thank_you;
    /**
    * Track the event of user changing the default price option
    *
    * @var boolean
    */
   public $track_price_change;
-   /**
-   * Track the event of user clicking on the confirm register button
-   *
-   * @var boolean
-   */
-  public $track_confirm_register;
    /**
    * Denotes whether ecommerce tracking is enabled or not
    *
@@ -202,23 +220,41 @@ class CRM_WebTracking_DAO_WebTracking extends CRM_Core_DAO
           'maxlength' => 64,
           'size' => CRM_Utils_Type::BIG,
         ) ,
+        'ga_event_tracking' => array(
+          'name' => 'ga_event_tracking',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Enable Event Tracking') ,
+          'description' => 'Denotes whether event tracking is enabled or not',
+        ) ,
+        'track_info' => array(
+          'name' => 'track_info',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Info') ,
+          'description' => 'Track the event of users visiting the info page',
+        ) ,
         'track_register' => array(
           'name' => 'track_register',
           'type' => CRM_Utils_Type::T_BOOLEAN,
           'title' => ts('Track Register') ,
-          'description' => 'Track the event of user clicking on the register button',
+          'description' => 'Track the event of users visiting the registration page',
+        ) ,
+        'track_confirm_register' => array(
+          'name' => 'track_confirm_register',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Confirm Register') ,
+          'description' => 'Track the event of users visiting the confirmation page',
+        ) ,
+        'track_thank_you' => array(
+          'name' => 'track_thank_you',
+          'type' => CRM_Utils_Type::T_BOOLEAN,
+          'title' => ts('Track Thank You') ,
+          'description' => 'Track the event of users visiting the thank you page',
         ) ,
         'track_price_change' => array(
           'name' => 'track_price_change',
           'type' => CRM_Utils_Type::T_BOOLEAN,
           'title' => ts('Track Price Change') ,
           'description' => 'Track the event of user changing the default price option',
-        ) ,
-        'track_confirm_register' => array(
-          'name' => 'track_confirm_register',
-          'type' => CRM_Utils_Type::T_BOOLEAN,
-          'title' => ts('Track Confirm Register') ,
-          'description' => 'Track the event of user clicking on the confirm register button',
         ) ,
         'track_ecommerce' => array(
           'name' => 'track_ecommerce',
@@ -259,9 +295,12 @@ class CRM_WebTracking_DAO_WebTracking extends CRM_Core_DAO
         'page_category' => 'page_category',
         'enable_tracking' => 'enable_tracking',
         'tracking_id' => 'tracking_id',
+        'ga_event_tracking' => 'ga_event_tracking',
+        'track_info' => 'track_info',
         'track_register' => 'track_register',
-        'track_price_change' => 'track_price_change',
         'track_confirm_register' => 'track_confirm_register',
+        'track_thank_you' => 'track_thank_you',
+        'track_price_change' => 'track_price_change',
         'track_ecommerce' => 'track_ecommerce',
         'is_experiment' => 'is_experiment',
         'experiment_id' => 'experiment_id',

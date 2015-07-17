@@ -36,6 +36,7 @@
     <comment>Denotes whether the page is an event page or a contribution page</comment>
     <add>4.6</add>
   </field>
+
   <field>
     <name>enable_tracking</name>
     <title>Enable Tracking</title>
@@ -52,12 +53,45 @@
     <comment>Unique UAID provided by google analytics</comment>
     <add>4.6</add>
   </field>
+
+  <field>
+    <name>ga_event_tracking</name>
+    <title>Enable Event Tracking</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Denotes whether event tracking is enabled or not</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_info</name>
+    <title>Track Info</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Track the event of users visiting the info page</comment>
+    <add>4.6</add>
+  </field>
   <field>
     <name>track_register</name>
     <title>Track Register</title>
     <type>boolean</type>
     <default>0</default>
-    <comment>Track the event of user clicking on the register button</comment>
+    <comment>Track the event of users visiting the registration page</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_confirm_register</name>
+    <title>Track Confirm Register</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Track the event of users visiting the confirmation page</comment>
+    <add>4.6</add>
+  </field>
+  <field>
+    <name>track_thank_you</name>
+    <title>Track Thank You</title>
+    <type>boolean</type>
+    <default>0</default>
+    <comment>Track the event of users visiting the thank you page</comment>
     <add>4.6</add>
   </field>
   <field>
@@ -69,14 +103,6 @@
     <add>4.6</add>
   </field>
   <field>
-    <name>track_confirm_register</name>
-    <title>Track Confirm Register</title>
-    <type>boolean</type>
-    <default>0</default>
-    <comment>Track the event of user clicking on the confirm register button</comment>
-    <add>4.6</add>
-  </field>
-  <field>
     <name>track_ecommerce</name>
     <title>Track Ecommerce</title>
     <type>boolean</type>
@@ -84,6 +110,7 @@
     <comment>Denotes whether ecommerce tracking is enabled or not</comment>
     <add>4.6</add>
   </field>
+
   <field>
     <name>is_experiment</name>
     <title>Is Experiment</title>
