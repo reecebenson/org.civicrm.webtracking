@@ -53,8 +53,8 @@ gapi.analytics.ready(function() {
   };
 
   var dateRange = {
-    'start-date': '14daysAgo',
-    'end-date': '8daysAgo'
+    'start-date': '30daysAgo',
+    'end-date': '1daysAgo'
   };
 
   var dateRangeSelector = new gapi.analytics.ext.DateRangeSelector({
@@ -115,7 +115,7 @@ gapi.analytics.ready(function() {
   var eventView = new gapi.analytics.googleCharts.DataChart({
     query: {
       metrics: 'ga:totalEvents',
-      dimensions: 'ga:eventCategory',
+      dimensions: 'ga:eventCategory,ga:eventAction',
       'start-date': '30daysAgo',
       'end-date': 'yesterday',
       'max-results': 6,

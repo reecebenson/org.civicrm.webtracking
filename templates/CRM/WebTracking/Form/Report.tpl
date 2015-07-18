@@ -66,7 +66,7 @@
             <h1 class="Titles-main">Top Affiliations</h1>
             <div class="Titles-sub">By revenue</div>
           </header>
-          <div id="transaction-view-container"></div>
+          <div id="transaction-view-container" margin="1em 0em 0em 0em"></div>
         </li>
         <li class="FlexGrid-item">
           <header class="Titles">

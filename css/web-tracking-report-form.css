@@ -1,7 +1,7 @@
 table.form-table-report-webtracking {
 	table-layout: fixed;
 	width: 688px;
-	margin: 1em 0 1em 0;
+	margin: 1em 0em 1em 0em;
 	border-color: #d4d2d0;
 }
 
@@ -13,4 +13,8 @@ table.form-table-report-webtracking {
 .form-table-report-webtracking td {
 	vertical-align: middle;	
 	border: 0 none;
+}
+
+#transaction-view-container {
+	margin: 2em 0em 0em 0em
 }
