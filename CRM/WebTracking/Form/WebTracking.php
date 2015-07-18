@@ -95,8 +95,8 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     // Checkbox to ask whether the page is the primary page of the experiment 
     $this->addElement('checkbox', 'is_experiment', ts('Primary page of experiment'));
 
-    // Text field to input the experiment id
-    $this->add('text', 'experiment_id', ts('Experiment ID'));
+    // Text field to input the experiment key
+    $this->add('text', 'experiment_id', ts('Experiment key'));
 
     $this->addFormRule(array('CRM_WebTracking_Form_WebTracking', 'formRule'));
 
@@ -124,7 +124,7 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
 
     if (isset($values['is_experiment']) && $values['is_experiment'] == 1) {
       if ($values['experiment_id'] == '') {
-        $errors['experiment_id'] = ts('Please provide a valid experiment id');
+        $errors['experiment_id'] = ts('Please provide a valid experiment key');
       }
     }
     

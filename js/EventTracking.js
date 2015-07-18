@@ -19,7 +19,7 @@ function trackEcommerce() {
 	ga('require', 'ecommerce');
 	ga('ecommerce:addTransaction', {
 			'id': trnxId,                     // Transaction ID. Required.
-			'affiliation': source,   		  		// Affiliation or store name.
+			'affiliation': source,   		  // Affiliation or store name.
 			'revenue': totalAmount,           // Grand Total.
 			'shipping': '0',                  // Shipping.
 			'tax': '0'                     	  // Tax.
