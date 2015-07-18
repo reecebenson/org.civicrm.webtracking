@@ -8,7 +8,7 @@
   </item>
   <item>
     <path>civicrm/report/webtracking</path>
-    <page_callback>CRM_WebTracking_Page_Report</page_callback>
+    <page_callback>CRM_WebTracking_Form_Report</page_callback>
     <title>Web Tracking Report</title>
     <access_arguments>access CiviCRM</access_arguments>
   </item>

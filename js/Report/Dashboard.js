@@ -7,7 +7,7 @@ gapi.analytics.ready(function() {
    */
   gapi.analytics.auth.authorize({
     container: 'embed-api-auth-container',
-    clientid: '1044437005397-8h2bu48o39aepds7mghv9jssiljilc33.apps.googleusercontent.com',
+    clientid: CRM.vars.WebTracking.web_tracking_report_id,
   });
 
   document.getElementById("EmbedAPI").classList.add('Site');
