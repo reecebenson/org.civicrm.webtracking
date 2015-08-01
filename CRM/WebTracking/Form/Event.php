@@ -28,7 +28,7 @@
 /**
  * This class generates form components for processing Event Web Tracking
  */
-class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
+class CRM_WebTracking_Form_Event extends CRM_Event_Form_ManageEvent {
 
   /**
    * Set variables up before form is built.
@@ -46,7 +46,6 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    * @return void
    */
   public function setDefaultValues() {
-    
     $params['page_id']=$this->_id;
     $params['page_category']="civicrm_event";
     $defaults = array();
@@ -73,7 +72,7 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
 
     // Checkbox to ask whether or not to enable event tracking
     $this->addElement('checkbox', 'ga_event_tracking', ts('Enable event tracking'));
-    
+
     // Checkbox to ask whether or not to track when the user visits the info page
     $this->addElement('checkbox', 'track_info', ts('Track visit to info page'));
 
@@ -98,7 +97,7 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
     // Text field to input the experiment key
     $this->add('text', 'experiment_id', ts('Experiment key'));
 
-    $this->addFormRule(array('CRM_WebTracking_Form_WebTracking', 'formRule'));
+    $this->addFormRule(array('CRM_WebTracking_Form_Event', 'formRule'));
 
     parent::buildQuickForm();
   }
@@ -137,7 +136,6 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
    * @return void
    */
   public function postProcess() {
-
     // TODO:: is this required?
     $params = $this->controller->exportValues($this->_name);
 
@@ -171,22 +169,6 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
 
     // Updating the database with the new entry
     $event = CRM_WebTracking_BAO_WebTracking::add($params);
-
-    if ($this->_action & CRM_Core_Action::ADD) {
-      $url = 'civicrm/event/manage/webtracking';
-      $urlParams = "action=update&reset=1&id={$event->id}";
-      // special case for 'Save and Done' consistency.
-      if ($this->controller->getButtonName('submit') == '_qf_EventInfo_upload_done') {
-        $url = 'civicrm/event/manage';
-        $urlParams = 'reset=1';
-        CRM_Core_Session::setStatus(ts("'%1' information has been saved.",
-          array(1 => $this->getTitle())
-        ), ts('Saved'), 'success');
-      }
-
-      CRM_Utils_System::redirect(CRM_Utils_System::url($url, $urlParams));
-    }
-
     parent::endPostProcess();
   }
 
@@ -198,5 +180,4 @@ class CRM_WebTracking_Form_WebTracking extends CRM_Event_Form_ManageEvent {
   public function getTitle() {
     return ts('Event Web Tracking Settings');
   }
-
 }

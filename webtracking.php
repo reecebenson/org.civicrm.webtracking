@@ -156,13 +156,48 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
     //Insert this tab in the end  
     $tabs = array_merge($tabs,$tab);
   }
-
-  if ($tabsetName == 'civicrm/event/manage/rows') {
+  else if ($tabsetName == 'civicrm/event/manage/rows') {
     if (!empty($context)) {
       $eventID = $context['event_id'];
       $trackingParams = array('page_id' => $eventID, 'page_category' => "civicrm_event");
       CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
       $tabs[$eventID]['enable_tracking'] = $trackingValues['enable_tracking'];
+    }
+  }
+  else if ($tabsetName == 'civicrm/admin/contribute') {
+    if (!empty($context)) {
+      $contribPageId = $context['contrib_page_id'];
+      $trackingParams = array('page_id' => $contribPageId, 'page_category' => "civicrm_contribution");
+      CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+
+      $url = CRM_Utils_System::url( 'civicrm/admin/contribute/webtracking',
+        "reset=1&snippet=5&force=1&id=$contribPageId&action=update&component=contribute" );
+      // Add a new WebTracking tab along with url 
+      $tab['webtracking'] = array(
+        'title' => ts('Web Tracking'),
+        'link' => $url,
+        'valid' => $trackingValues['enable_tracking'],
+        'active' => 1,
+        'current' => false,
+      );
+    }
+    else {
+      $tab['webtracking'] = array(
+        'title' => ts('Web Tracking'),
+        'url' => 'civicrm/admin/contribute/webtracking',
+        'field' => 'enable_tracking',
+      );
+    }
+ 
+    //Insert this tab in the end  
+    $tabs = array_merge($tabs,$tab);
+  }
+  else if ($tabsetName == 'civicrm/admin/contribute/rows') {
+    if (!empty($context)) {
+      $contribPageId = $context['contrib_page_id'];
+      $trackingParams = array('page_id' => $contribPageId, 'page_category' => "civicrm_contribution");
+      CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+      $tabs[$contribPageId]['enable_tracking'] = $trackingValues['enable_tracking'];
     }
   }
 }
@@ -222,10 +257,17 @@ function webtracking_civicrm_pageRun(&$page) {
 */
 function webtracking_civicrm_buildForm($formName, &$form) {
 
+  $contribFormNames = array('CRM_Contribute_Form_Contribution_Main');
   $eventFormNames = array('CRM_Event_Form_Registration_Register', 'CRM_Event_Form_Registration_ThankYou', 'CRM_Event_Form_Registration_Confirm');
-  if (in_array($formName, $eventFormNames)) {
+  if (in_array($formName, $eventFormNames) || in_array($formName, $contribFormNames)) {
 
-    $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
+    if (in_array($formName, $eventFormNames)) {
+      $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
+    }
+    else {
+      $trackingParams = array('page_id' => $form->_id, 'page_category' => "civicrm_contribution");
+    }
+
     CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
 
     if ($trackingValues['enable_tracking'] == 1) {
@@ -240,7 +282,7 @@ function webtracking_civicrm_buildForm($formName, &$form) {
       return;
     }
 
-    if ($formName == 'CRM_Event_Form_Registration_Register') {
+    if ($formName == 'CRM_Event_Form_Registration_Register' || $formName == 'CRM_Contribute_Form_Contribution_Main') {
       if ($trackingValues['track_register'] == 1) {
         CRM_Core_Resources::singleton()->addScript('trackViewRegistration();');
       }
