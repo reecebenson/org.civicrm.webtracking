@@ -257,16 +257,19 @@ function webtracking_civicrm_pageRun(&$page) {
 */
 function webtracking_civicrm_buildForm($formName, &$form) {
 
-  $contribFormNames = array('CRM_Contribute_Form_Contribution_Main');
+  $contribFormNames = array('CRM_Contribute_Form_Contribution_Main', 'CRM_Contribute_Form_Contribution_ThankYou', 'CRM_Contribute_Form_Contribution_Confirm');
   $eventFormNames = array('CRM_Event_Form_Registration_Register', 'CRM_Event_Form_Registration_ThankYou', 'CRM_Event_Form_Registration_Confirm');
-  if (in_array($formName, $eventFormNames) || in_array($formName, $contribFormNames)) {
+  $category = 'None';
 
-    if (in_array($formName, $eventFormNames)) {
-      $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
-    }
-    else {
-      $trackingParams = array('page_id' => $form->_id, 'page_category' => "civicrm_contribution");
-    }
+  if (in_array($formName, $eventFormNames)) {
+    $category = 'Event';  
+  }
+  else if (in_array($formName, $contribFormNames)) {
+    $category = 'Contribution';
+  }
+
+  if ($category == 'Event') {
+    $trackingParams = array('page_id' => $form->_eventId, 'page_category' => "civicrm_event");
 
     CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
 
@@ -282,7 +285,7 @@ function webtracking_civicrm_buildForm($formName, &$form) {
       return;
     }
 
-    if ($formName == 'CRM_Event_Form_Registration_Register' || $formName == 'CRM_Contribute_Form_Contribution_Main') {
+    if ($formName == 'CRM_Event_Form_Registration_Register' && $trackingValues['ga_event_tracking'] == 1) {
       if ($trackingValues['track_register'] == 1) {
         CRM_Core_Resources::singleton()->addScript('trackViewRegistration();');
       }
@@ -290,27 +293,93 @@ function webtracking_civicrm_buildForm($formName, &$form) {
         CRM_Core_Resources::singleton()->addScript('trackPriceChange();');
       }
     }
-
     else if ($formName == 'CRM_Event_Form_Registration_ThankYou') {
       if ($trackingValues['track_ecommerce'] == 1) {
         CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => $form->_trxnId, 'totalAmount' => $form->_totalAmount));
         // Fetching the source from the session and adding it as a variable.
         $session = CRM_Core_Session::singleton();
         CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
-        if ($form->_trxnId) {
+        if ($form->_trxnId && $trackingValues['ga_event_tracking'] == 1) {
           CRM_Core_Resources::singleton()->addScript('trackEcommerce();');
         }
       }
-      if ($trackingValues['track_thank_you'] == 1) {
+      if ($trackingValues['track_thank_you'] == 1 && $trackingValues['ga_event_tracking'] == 1) {
         CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Thank You Page', 'Viewed')");
       }
     }
-
     else if ($formName == 'CRM_Event_Form_Registration_Confirm') {
       if ($trackingValues['track_confirm_register'] == 1) {
         CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Confirmation Page', 'Viewed')");
       }
     }    
+  }
+  else if ($category == 'Contribution') {
+    $trackingParams = array('page_id' => $form->_id, 'page_category' => "civicrm_contribution");
+    CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
+
+    if ($trackingValues['enable_tracking'] == 1) {
+
+      // General script for web tracking
+      CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id']));
+      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/WebTracking.js',10,'html-header');
+      $form->assign('enable_tracking',1);
+
+      if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+        if ($trackingValues['is_experiment'] == 1) {
+          // Script for the experiment
+          CRM_Core_Resources::singleton()->addVars('WebTracking', array('experiment_id' => $trackingValues['experiment_id']));
+          CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/Experiment.js', 11, 'html-header');
+          CRM_Core_Resources::singleton()->addScript("utmx('url','A/B');",12,'html-header');
+          CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');", 13, 'html-header');
+        }
+        else {
+          CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');",11,'html-header');
+          // Script for event tracking
+          CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/EventTracking.js');
+          if ($trackingValues['track_register'] == 1 && $trackingValues['ga_event_tracking'] == 1) {
+            CRM_Core_Resources::singleton()->addScript('trackViewRegistration();');
+          }
+          if($form->_values['is_monetary'] == 1 && $trackingValues['track_price_change'] == 1 && $trackingValues['ga_event_tracking'] == 1) {
+            CRM_Core_Resources::singleton()->addScript('trackPriceChange();');
+          }
+        }
+
+        // Saving the utm source in the session variable if track_ecommerce is enabled
+        if($trackingValues['track_ecommerce'] == 1) {
+          $session = CRM_Core_Session::singleton();
+          if(isset($_GET['utm_source'])) {
+            $session->set('utm_source',$_GET['utm_source']);
+          }
+          else {
+            $session->set('utm_source','general');
+          }  
+        }
+      }
+      else if ($formName == 'CRM_Contribute_Form_Contribution_Confirm' && $trackingValues['ga_event_tracking'] == 1) {
+        CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/EventTracking.js');
+        if ($trackingValues['track_confirm_register'] == 1) {
+          CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Confirmation Page', 'Viewed')");
+        }
+      }
+      else if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
+        CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/EventTracking.js');
+        if ($trackingValues['track_ecommerce'] == 1) {
+          CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => CRM_Utils_Array::value('trxn_id', $form->_params), 'totalAmount' => $form->_amount));
+          // Fetching the source from the session and adding it as a variable.
+          $session = CRM_Core_Session::singleton();
+          CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
+          if (CRM_Utils_Array::value('trxn_id', $form->_params) && $trackingValues['ga_event_tracking'] == 1) {
+            CRM_Core_Resources::singleton()->addScript('trackEcommerce();');
+          }
+        }
+        if ($trackingValues['track_thank_you'] == 1 && $trackingValues['ga_event_tracking'] == 1) {
+          CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Thank You Page', 'Viewed')");
+        }
+      }
+    }
+    else {
+      $form->assign('enable_tracking',0);
+    }
   } 
 }
 
