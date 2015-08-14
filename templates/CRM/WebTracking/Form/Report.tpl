@@ -1,6 +1,6 @@
-<input id='toggleReportParams' type='button' value='Configure Client ID'>
+<input id='toggleReportParams' class='report-webtracking-button' type='button' value='Configure Client ID'>
 <div id='ReportParams'>
-  <table class="form-table-report-webtracking" border="0">
+  <table class="form-table-report-webtracking">
     <tr class="crm-report-webtracking-form-block-web_tracking_report_id">
         <td>{$form.web_tracking_report_id.label} {help id="web-tracking-report-id"}</td>
         <td>{$form.web_tracking_report_id.html} </br></td>

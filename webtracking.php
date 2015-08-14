@@ -229,8 +229,8 @@ function webtracking_civicrm_pageRun(&$page) {
         CRM_Core_Resources::singleton()->addScript("ga('send', 'pageview');",11,'html-header');
       }
 
-      // Appropriate js function call if track_info is enabled 
-      if ($trackingValues['track_info'] == 1) {
+      // Appropriate js function call if track_info is enabled and event tracking is enabled
+      if ($trackingValues['track_info'] == 1 && $trackingValues['ga_event_tracking'] == 1) {
         CRM_Core_Resources::singleton()->addScript("ga('send', 'event', 'Info Page', 'Viewed')");
       }  
 
