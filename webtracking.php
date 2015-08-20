@@ -368,7 +368,7 @@ function webtracking_civicrm_buildForm($formName, &$form) {
           // Fetching the source from the session and adding it as a variable.
           $session = CRM_Core_Session::singleton();
           CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
-          if (CRM_Utils_Array::value('trxn_id', $form->_params) && $trackingValues['ga_event_tracking'] == 1) {
+          if ($trackingValues['ga_event_tracking'] == 1) {
             CRM_Core_Resources::singleton()->addScript('trackEcommerce();');
           }
         }
