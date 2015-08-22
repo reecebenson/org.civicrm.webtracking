@@ -215,7 +215,7 @@ function webtracking_civicrm_pageRun(&$page) {
     if ($trackingValues['enable_tracking'] == 1) {
       // General script for web tracking
       CRM_Core_Resources::singleton()->addVars('WebTracking', array('tracking_id' => $trackingValues['tracking_id']));
-      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/WebTracking.js',10,'html-header');
+      CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/WebTracking.js', 10, 'html-header');
       $page->assign('enable_tracking',1);
 
       if ($trackingValues['is_experiment'] == 1) {
@@ -364,7 +364,7 @@ function webtracking_civicrm_buildForm($formName, &$form) {
       else if ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') {
         CRM_Core_Resources::singleton()->addScriptFile('org.civicrm.webtracking', 'js/EventTracking.js');
         if ($trackingValues['track_ecommerce'] == 1) {
-          CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => CRM_Utils_Array::value('trxn_id', $form->_params), 'totalAmount' => $form->_amount));
+          CRM_Core_Resources::singleton()->addVars('WebTracking', array('trnx_id' => rand(), 'totalAmount' => $form->_amount));
           // Fetching the source from the session and adding it as a variable.
           $session = CRM_Core_Session::singleton();
           CRM_Core_Resources::singleton()->addVars('WebTracking', array('utm_source' => $session->get('utm_source')));
