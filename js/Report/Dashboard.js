@@ -115,7 +115,7 @@ gapi.analytics.ready(function() {
   var eventView = new gapi.analytics.googleCharts.DataChart({
     query: {
       metrics: 'ga:totalEvents',
-      dimensions: 'ga:eventCategory,ga:eventAction',
+      dimensions: 'ga:eventCategory',
       'start-date': '30daysAgo',
       'end-date': 'yesterday',
       'max-results': 6,

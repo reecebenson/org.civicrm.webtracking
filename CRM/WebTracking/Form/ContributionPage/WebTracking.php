@@ -73,8 +73,8 @@ class CRM_WebTracking_Form_ContributionPage_WebTracking extends CRM_Contribute_F
     // Checkbox to ask whether or not to enable event tracking
     $this->addElement('checkbox', 'ga_event_tracking', ts('Enable event tracking'));
 
-    // Checkbox to ask whether or not to track when the user visits the registration page
-    $this->addElement('checkbox', 'track_register', ts('Track visit to registration page'));
+    // Checkbox to ask whether or not to track when the user visits the contribution page
+    $this->addElement('checkbox', 'track_register', ts('Track visit to contribution page'));
 
     // Checkbox to ask whether or not to track when the user visits the confirmation page
     $this->addElement('checkbox', 'track_confirm_register', ts('Track visit to confirmation page'));
