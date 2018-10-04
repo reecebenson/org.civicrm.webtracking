@@ -148,7 +148,7 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
     else {
       $tab['webtracking'] = array(
         'title' => ts('Web Tracking'),
-        'url' => CRM_Utils_System::url('civicrm/event/manage/webtracking', 'reset=1', TRUE),
+        'url' => 'civicrm/event/manage/webtracking', // putting CRM_Utils_System::url("", 'reset=1', TRUE); leads to a broken link?
         'field' => 'enable_tracking',
       );
     }
@@ -165,8 +165,8 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
     }
   }
   else if ($tabsetName == 'civicrm/admin/contribute') {
-    if (!empty($context)) {
-      $contribPageId = $context['contrib_page_id'];
+    if (!empty($context['contribution_page_id'])) {
+      $contribPageId = $context['contribution_page_id'];
       $trackingParams = array('page_id' => $contribPageId, 'page_category' => "civicrm_contribution");
       CRM_WebTracking_BAO_WebTracking::retrieve($trackingParams,$trackingValues);
 
@@ -174,11 +174,22 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
         "reset=1&snippet=5&force=1&id=$contribPageId&action=update&component=contribute" );
       // Add a new WebTracking tab along with url 
       $tab['webtracking'] = array(
+        'name' => ts('Web Tracking'),
         'title' => ts('Web Tracking'),
         'link' => $url,
         'valid' => $trackingValues['enable_tracking'],
+        'uniqueName' => 'webTracking',
         'active' => 1,
         'current' => false,
+      );
+    }
+    else if(!empty($context['urlString']) && !empty($context['urlParams'])) {
+      $tab[] = array(
+        'name' => ts('Web Tracking'),
+        'title' => ts('Web Tracking'),
+        'url' => $context['urlString'] . 'webtracking',
+        'qs' => $context['urlParams'],
+        'uniqueName' => 'webTracking'
       );
     }
     else {
@@ -189,8 +200,8 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
       );
     }
  
-    //Insert this tab in the end  
-    $tabs = array_merge($tabs,$tab);
+    //Insert this tab into position 4
+    $tabs = array_merge(array_slice($tabs, 0, 4), $tab, array_slice($tabs, 4));
   }
   else if ($tabsetName == 'civicrm/admin/contribute/rows') {
     if (!empty($context)) {
