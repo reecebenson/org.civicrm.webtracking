@@ -114,14 +114,14 @@ function _webtracking_civix_civicrm_upgrade($op, CRM_Queue_Queue $queue = NULL) 
 }
 
 /**
- * @return CRM_webtracking_Upgrader
+ * @return CRM_WebTracking_Upgrader
  */
 function _webtracking_civix_upgrader() {
-  if (!file_exists(__DIR__.'/CRM/webtracking/Upgrader.php')) {
+  if (!file_exists(__DIR__.'/CRM/WebTracking/Upgrader.php')) {
     return NULL;
   }
   else {
-    return CRM_webtracking_Upgrader_Base::instance();
+    return CRM_WebTracking_Upgrader_Base::instance();
   }
 }
 
