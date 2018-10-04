@@ -46,8 +46,8 @@ class CRM_WebTracking_Form_Event extends CRM_Event_Form_ManageEvent {
    * @return void
    */
   public function setDefaultValues() {
-    $params['page_id']=$this->_id;
-    $params['page_category']="civicrm_event";
+    $params['page_id'] = $this->_id;
+    $params['page_category'] = "civicrm_event";
     $defaults = array();
     CRM_WebTracking_BAO_WebTracking::retrieve($params, $defaults);
 
@@ -60,10 +60,6 @@ class CRM_WebTracking_Form_Event extends CRM_Event_Form_ManageEvent {
    * @return void
    */
   public function buildQuickForm() {
-
-    // TODO:: Is this required?
-    $this->applyFilter('__ALL__', 'trim');
-
     // Checkbox to ask whether or not to enable web tracking
     $this->addElement('checkbox', 'enable_tracking', ts('Enable web tracking'));
 
@@ -117,13 +113,15 @@ class CRM_WebTracking_Form_Event extends CRM_Event_Form_ManageEvent {
       // Checking that UAID provided by the customer has the string 'UA-' as its prefix
       $pos = strpos($values['tracking_id'],'UA-'); 
       if ($pos===false || $pos!==0) {
-	      $errors['tracking_id'] = ts('Please provide a valid tracking id');
+        form_set_error('tracking_id', ts('Please provide a valid Tracking ID'));
+        $errors['tracking_id'] = true;
       }
     }
 
     if (isset($values['is_experiment']) && $values['is_experiment'] == 1) {
       if ($values['experiment_id'] == '') {
-        $errors['experiment_id'] = ts('Please provide a valid experiment key');
+        form_set_error('experiment_id', ts('Please provide a valid Experiment Key'));
+        $errors['experiment_id'] = true;
       }
     }
     
