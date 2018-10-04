@@ -148,7 +148,7 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
     else {
       $tab['webtracking'] = array(
         'title' => ts('Web Tracking'),
-        'url' => 'civicrm/event/manage/webtracking',
+        'url' => CRM_Utils_System::url('civicrm/event/manage/webtracking', 'reset=1', TRUE),
         'field' => 'enable_tracking',
       );
     }
@@ -184,7 +184,7 @@ function webtracking_civicrm_tabset($tabsetName, &$tabs, $context) {
     else {
       $tab['webtracking'] = array(
         'title' => ts('Web Tracking'),
-        'url' => 'civicrm/admin/contribute/webtracking',
+        'url' => CRM_Utils_System::url('civicrm/admin/contribute/webtracking', 'reset=1', TRUE),
         'field' => 'enable_tracking',
       );
     }
@@ -390,7 +390,7 @@ function webtracking_civicrm_buildForm($formName, &$form) {
 function webtracking_civicrm_navigationMenu(&$params) {
  
   // Check that our item doesn't already exist
-  $menu_item_search = array('url' => 'civicrm/report/webtracking');
+  $menu_item_search = array('url' => CRM_Utils_System::url('civicrm/report/webtracking', 'reset=1', TRUE));
   $menu_items = array();
   CRM_Core_BAO_Navigation::retrieve($menu_item_search, $menu_items);
  
@@ -409,7 +409,7 @@ function webtracking_civicrm_navigationMenu(&$params) {
     'attributes' => array (
       'label' => ts('Web Tracking Report',array('domain' => 'org.civicrm.webtracking')),
       'name' => 'Web Tracking Report',
-      'url' => 'civicrm/report/webtracking',
+      'url' => CRM_Utils_System::url('civicrm/report/webtracking', 'reset=1', TRUE),
       'permission' => 'access CiviReport,access CiviEvent',
       'operator' => 'OR',
       'separator' => 1,
