@@ -137,22 +137,24 @@ class CRM_WebTracking_Form_Event extends CRM_Event_Form_ManageEvent {
     // TODO:: is this required?
     $params = $this->controller->exportValues($this->_name);
 
-    $existParams['page_id'] = $this->_id;
-    $existParams['page_category'] = "civicrm_event";
-    $existingEnrty = array();
+    $existParams = [
+      'page_id' => $this->_id,
+      'page_category' => "civicrm_event"
+    ];
+    $existingEntry = [];
     
-    CRM_WebTracking_BAO_WebTracking::retrieve($existParams, $existingEnrty);
+    CRM_WebTracking_BAO_WebTracking::retrieve($existParams, $existingEntry);
 
     // Setting up the params array with the values obtained from the form 
-    if (!empty($existingEnrty)) {
-       $params['id'] = $existingEnrty['id']; 
+    if (!empty($existingEntry)) {
+       $params['id'] = $existingEntry['id']; 
     }
+
     $params['page_id'] = $this->_id;
     $params['page_category']="civicrm_event";
 
     $params['enable_tracking'] = CRM_Utils_Array::value('enable_tracking', $params, FALSE);
     $params['tracking_id'] = CRM_Utils_Array::value('tracking_id', $params, NULL);
-
     $params['ga_event_tracking'] = CRM_Utils_Array::value('ga_event_tracking', $params, FALSE);
     $params['track_info'] = CRM_Utils_Array::value('track_info', $params, FALSE);
     $params['track_register'] = CRM_Utils_Array::value('track_register', $params, FALSE);
@@ -167,6 +169,7 @@ class CRM_WebTracking_Form_Event extends CRM_Event_Form_ManageEvent {
 
     // Updating the database with the new entry
     $event = CRM_WebTracking_BAO_WebTracking::add($params);
+
     parent::endPostProcess();
   }
 
